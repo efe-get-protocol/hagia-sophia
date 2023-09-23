@@ -17,7 +17,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom'
 
 const pages = ['Crowdfunding', 'Bounties', 'Review'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 const NavigationBar = () => {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -39,7 +39,7 @@ const NavigationBar = () => {
   };
 
   return (
-    <AppBar position="static">
+    <AppBar position="static" sx={{ backgroundColor: '#0D47A1' }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <BiotechIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />

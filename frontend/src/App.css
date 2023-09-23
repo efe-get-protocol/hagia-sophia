@@ -1,4 +1,12 @@
 .App {
   text-align: center;
 }
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #121212; /* Set your desired background color here */
+  font-family: 'Roboto', sans-serif; /* Adjust font-family as needed */
+  color: #f0f0f0; /* Text color for the entire page */
+  min-height: 100vh; /* Make sure the page covers the full viewport height */
+}
 

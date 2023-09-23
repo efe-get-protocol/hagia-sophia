@@ -12,7 +12,7 @@ docs/
 
 # Dotenv file
 .env
-graph/node_modules
+thegraph/node_modules
 node_modules
-graph/generated
-graph/build
+thegraph/generated
+thegraph/build

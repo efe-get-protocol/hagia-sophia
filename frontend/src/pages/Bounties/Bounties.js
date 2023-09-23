@@ -1,6 +1,9 @@
 import React from 'react'
 import './Bounties.css'
 import Infographic from '../../components/Infographic/Infographic'
+import Button from '@mui/material/Button'
+import SendIcon from '@mui/icons-material/Send';
+import { Link } from 'react-router-dom';
 
 const Bounties = () => {
 
@@ -14,7 +17,10 @@ const Bounties = () => {
 
   return (
     <div>
-      <h1>Bounties</h1>
+      <br/>
+      <Button component={Link} to="/Application" variant="contained" endIcon={<SendIcon />} >Create Bounty</Button>
+      <br/>
+      <br/>
       <div className="info-container">
         <Infographic image={image} organization={organization} description={description} amount_raised={amount_raised} target_amount={target_amount} />
         <Infographic image={image} organization={organization} description={description} amount_raised={amount_raised} target_amount={target_amount} />

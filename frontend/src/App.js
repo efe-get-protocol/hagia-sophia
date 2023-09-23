@@ -6,6 +6,7 @@ import Bounties from './pages/Bounties/Bounties.js'
 import Review from './pages/Review/Review.js'
 import Research from './pages/Research/Research.js'
 import Login from './pages/Login/Login.js'
+import ResearchForm from './pages/Application/ResearchForm'
 
 
 function App() {
@@ -19,6 +20,8 @@ function App() {
         <Route path='/Review' element={ <Review/> } />
         <Route path='/Research' element={ <Research/> } />
         <Route path='/Login' element={<Login/>} />
+        <Route path='/ResearchForm' element={<ResearchForm/>} />
+        
       </Routes>
     </div>
   );

@@ -3,6 +3,16 @@ import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
 
+
+const { ethers } = require("ethers");
+
+const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
+const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`)
+
+const privateKey = '' // Private key of account 1
+const contractAddress = "YOUR_CONTRACT_ADDRESS";
+const wallet = new ethers.Wallet(privateKey, provider);
+
 const styles = {
     form: {
       display: 'flex',
@@ -41,6 +51,8 @@ const ResearchForm = () => {
       const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission here This is where etherjs
+
+
         console.log(formData);
       };
     

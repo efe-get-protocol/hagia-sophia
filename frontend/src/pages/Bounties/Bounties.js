@@ -18,7 +18,7 @@ const Bounties = () => {
   return (
     <div>
       <br/>
-      <Button component={Link} to="/Application" variant="contained" endIcon={<SendIcon />} >Create Bounty</Button>
+      <Button component={Link} to="/BountyForm" variant="contained" endIcon={<SendIcon />} >Create Bounty</Button>
       <br/>
       <br/>
       <div className="info-container">

@@ -21,16 +21,13 @@ const styles = {
     },
   };
 
-const ResearchForm = () => {
+const BountyForm = () => {
 
     const [formData, setFormData] = useState({
         title: '',
         description: '',
         documentUrl: '',
-        fundingLimit: '',
-        reviewerLimit: '',
-        reviewFundingPercentage: '',
-        image: '',
+        bountyAmount: ''
       });
     
       const handleChange = (e) => {
@@ -46,7 +43,9 @@ const ResearchForm = () => {
     
       return (
         <div className="research-form">
-          <h1>Please fill out the information below and wait for approval.</h1>
+        <h1>Please fill out the information below and wait for approval.</h1>
+          <br/>
+          <br/>
         <form style={styles.form} onSubmit={handleSubmit}>
             <TextField
                 label="Title"
@@ -79,73 +78,12 @@ const ResearchForm = () => {
                 }}
             />
             <TextField
-                label="Research Document URL"
+                label="Bounty Document URL"
                 name="documentUrl"
                 fullWidth
                 required
                 onChange={handleChange}
                 value={formData.documentUrl}
-                style={styles.textField}
-                InputLabelProps={{
-                style: { color: 'white' },
-                }}
-                InputProps={{
-                style: { color: 'white', backgroundColor: '#6A0DAD' },
-                }}
-            />
-            <TextField
-                label="Funding Limit"
-                name="fundingLimit"
-                fullWidth
-                required
-                onChange={handleChange}
-                value={formData.fundingLimit}
-                style={styles.textField}
-                InputLabelProps={{
-                style: { color: 'white' },
-                }}
-                InputProps={{
-                style: { color: 'white', backgroundColor: '#6A0DAD' },
-                }}
-            />
-            <TextField
-                label="Reviewer Limit"
-                name="reviewerLimit"
-                fullWidth
-                required
-                onChange={handleChange}
-                value={formData.reviewerLimit}
-                style={styles.textField}
-                InputLabelProps={{
-                style: { color: 'white' },
-                }}
-                InputProps={{
-                style: { color: 'white', backgroundColor: '#6A0DAD' },
-                }}
-            />
-            <TextField
-                label="Review Funding Limit Percentage"
-                name="reviewFundingPercentage"
-                fullWidth
-                required
-                onChange={handleChange}
-                value={formData.reviewFundingPercentage}
-                style={styles.textField}
-                InputLabelProps={{
-                style: { color: 'white' },
-                }}
-                InputProps={{
-                style: { color: 'white', backgroundColor: '#6A0DAD' },
-                }}
-            />
-
-            <TextField
-                label="Organization Image"
-                name="image"
-                fullWidth
-                required
-                onChange={handleChange}
-                value={formData.image}
                 style={styles.textField}
                 InputLabelProps={{
                 style: { color: 'white' },
@@ -169,4 +107,4 @@ const ResearchForm = () => {
       
 }
 
-export default ResearchForm
+export default BountyForm

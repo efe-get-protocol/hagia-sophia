@@ -26,6 +26,7 @@ type Research @entity {
   transactionHash: Bytes!
   peerReviews: [PeerReview!]!
   fundingReceived: BigInt!
+  image: String!
 }
 
 type Bounty @entity {

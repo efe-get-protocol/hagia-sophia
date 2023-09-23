@@ -56,6 +56,7 @@ import { BIG_INT_ZERO } from "../lib/constants";
       research.reviewFundingPercentage = BIG_INT_ZERO
       research.reviewerLimit = BIG_INT_ZERO
       research.title = ""
+      research.image = ""
       research.transactionHash =new Bytes(0);
 
     }
@@ -165,6 +166,7 @@ import { BIG_INT_ZERO } from "../lib/constants";
     entity.transactionHash = event.transaction.hash
     entity.peerReviews = []
     entity.fundingReceived = BIG_INT_ZERO
+    
   
     entity.save()
 

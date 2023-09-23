@@ -72,7 +72,8 @@ contract HagiaSophia {
         uint256 fundingLimit,
         uint256 reviewerLimit,
         uint256 reviewDeadline,
-        uint256 reviewFundingPercentage
+        uint256 reviewFundingPercentage,
+        string image
     );
     event BountyCreated(uint256 id, string title, string description, string documentUrl, uint256 bountyAmount);
     event AppliedToBounty(uint256 bountyId, address applicant);
@@ -107,7 +108,7 @@ contract HagiaSophia {
             researchers[researcherIds[i]] = currentResearcher;
         }
 
-        RewardNFT(0x8aF2Ecc68859c4A62A51650fcaA08E787b32A31c).awardItem(msg.sender, "https://ipfs.io/ipfs/QmY7m1i78SQ3LHLYhJTmtwWK1Y4jpEahsUtS2WwEQVmGzn");
+        RewardNFT(0xD9e9927098DcEA8a6D6698c77922B4588C2aA9E4).awardItem(msg.sender, "https://ipfs.io/ipfs/QmY7m1i78SQ3LHLYhJTmtwWK1Y4jpEahsUtS2WwEQVmGzn");
 
         emit FundingReceived(researchId, msg.value, msg.sender);
     }
@@ -165,7 +166,8 @@ contract HagiaSophia {
             fundingLimit,
             reviewerLimit,
             block.timestamp + (reviewDeadline * 1 days),
-            reviewFundingPercentage
+            reviewFundingPercentage,
+            image
         );
     }
 

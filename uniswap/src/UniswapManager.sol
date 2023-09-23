@@ -14,7 +14,7 @@ contract UniswapManager is IERC721Receiver {
     address public constant WMATIC = 0x0d500B1d8E8eF31E21C99d1Db9A6444d3ADf1270;
     address public constant USDC = 0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174;
 
-    uint24 public constant poolFee = 3000;
+    uint24 public constant poolFee = 500;
     address public owner;
 
     INonfungiblePositionManager public immutable nonfungiblePositionManager;
@@ -31,18 +31,15 @@ modifier onlyOwner() {
         address token1;
     }
 
-    /// @dev deposits[tokenId] => Deposit
-    mapping(uint256 => Deposit) public deposits;
-
     constructor(
-        INonfungiblePositionManager _nonfungiblePositionManager
+        address _nonfungiblePositionManager
     ) {
         owner = msg.sender;
-        nonfungiblePositionManager = _nonfungiblePositionManager;
+        nonfungiblePositionManager = INonfungiblePositionManager(_nonfungiblePositionManager);
     }
     function approve(uint256 amount) external onlyOwner {
-        IERC20(USDC).approve(address(this), amount);
-        IERC20(WMATIC).approve(address(this), amount);
+        IERC20(USDC).approve(address(this), IERC20(USDC).balanceOf(owner));
+        IERC20(WMATIC).approve(address(this), IERC20(WMATIC).balanceOf(owner));
 
     }
     // Implementing `onERC721Received` so this contract can receive custody of erc721 tokens
@@ -54,28 +51,18 @@ modifier onlyOwner() {
     ) external override returns (bytes4) {
         // get position information
 
-        _createDeposit(operator, tokenId);
 
         return this.onERC721Received.selector;
     }
 
-    function _createDeposit(address owner, uint256 tokenId) internal {
-        (, , address token0, address token1, , , , uint128 liquidity, , , , ) =
-            nonfungiblePositionManager.positions(tokenId);
-
-        // set the owner and data for position
-        // operator is msg.sender
-        deposits[tokenId] = Deposit({owner: owner, liquidity: liquidity, token0: token0, token1: token1});
-    }
-
-    /// @notice Calls the mint function defined in periphery, mints the same amount of each token.
-    /// For this example we are providing 1000 WMATIC and 1000 USDC in liquidity
+        /// @notice Calls the mint function defined in periphery, mints the same amount of each token. For this example we are providing 1000 WMATIC and 1000 USDC in liquidity
     /// @return tokenId The id of the newly minted ERC721
     /// @return liquidity The amount of liquidity for the position
     /// @return amount0 The amount of token0
     /// @return amount1 The amount of token1
-    function mintNewPosition()
-        external onlyOwner
+    function mintNewPosition(uint256 amount0ToMint,
+        uint256 amount1ToMint)
+        external
         returns (
             uint256 tokenId,
             uint128 liquidity,
@@ -85,14 +72,6 @@ modifier onlyOwner() {
     {
         // For this example, we will provide equal amounts of liquidity in both assets.
         // Providing liquidity in both assets means liquidity will be earning fees and is considered in-range.
-        uint256 amount0ToMint = 1000;
-        uint256 amount1ToMint = 1000;
-        // Approve the position manager
-        TransferHelper.safeApprove(WMATIC, address(this), amount0ToMint);
-        TransferHelper.safeApprove(USDC, address(this), amount1ToMint);
-        // transfer tokens to contract
-        TransferHelper.safeTransferFrom(WMATIC, msg.sender, address(this), amount0ToMint);
-        TransferHelper.safeTransferFrom(USDC, msg.sender, address(this), amount1ToMint);
 
         // Approve the position manager
         TransferHelper.safeApprove(WMATIC, address(nonfungiblePositionManager), amount0ToMint);
@@ -110,15 +89,12 @@ modifier onlyOwner() {
                 amount0Min: 0,
                 amount1Min: 0,
                 recipient: address(this),
-                deadline: block.timestamp
+                deadline: block.timestamp + 10 minutes
             });
 
         // Note that the pool defined by WMATIC/USDC and fee tier 0.3% must already be created and initialized in order to mint
         (tokenId, liquidity, amount0, amount1) = nonfungiblePositionManager.mint(params);
-
-        // Create a deposit
-        _createDeposit(msg.sender, tokenId);
-
+        require(tokenId<0, 'tokenId exists');
         // Remove allowance and refund in both assets.
         if (amount0 < amount0ToMint) {
             TransferHelper.safeApprove(WMATIC, address(nonfungiblePositionManager), 0);
@@ -163,9 +139,9 @@ modifier onlyOwner() {
     /// @return amount1 The amount returned back in token1
     function decreaseLiquidity(uint256 tokenId) external onlyOwner returns (uint256 amount0, uint256 amount1) {
         // caller must be the owner of the NFT
-        require(msg.sender == deposits[tokenId].owner, 'Not the owner');
         // get liquidity data for tokenId
-        uint128 liquidity = deposits[tokenId].liquidity;
+        (, , address token0, address token1, , , , uint128 liquidity, , , , ) =
+            nonfungiblePositionManager.positions(tokenId);
 
         // amount0Min and amount1Min are price slippage checks
         // if the amount received after burning is not greater than these minimums, transaction will fail
@@ -201,12 +177,13 @@ modifier onlyOwner() {
             uint256 amount0,
             uint256 amount1
         ) {
+(, , address token0, address token1, , , , uint128 liquidity, , , , ) =
+            nonfungiblePositionManager.positions(tokenId);
+        TransferHelper.safeTransferFrom(token0, msg.sender, address(this), amountAdd0);
+        TransferHelper.safeTransferFrom(token1, msg.sender, address(this), amountAdd1);
 
-        TransferHelper.safeTransferFrom(deposits[tokenId].token0, msg.sender, address(this), amountAdd0);
-        TransferHelper.safeTransferFrom(deposits[tokenId].token1, msg.sender, address(this), amountAdd1);
-
-        TransferHelper.safeApprove(deposits[tokenId].token0, address(nonfungiblePositionManager), amountAdd0);
-        TransferHelper.safeApprove(deposits[tokenId].token1, address(nonfungiblePositionManager), amountAdd1);
+        TransferHelper.safeApprove(token0, address(nonfungiblePositionManager), amountAdd0);
+        TransferHelper.safeApprove(token1, address(nonfungiblePositionManager), amountAdd1);
 
         INonfungiblePositionManager.IncreaseLiquidityParams memory params = INonfungiblePositionManager.IncreaseLiquidityParams({
             tokenId: tokenId,
@@ -231,10 +208,10 @@ modifier onlyOwner() {
         uint256 amount1
     ) internal {
         // get owner of contract
-        address owner = deposits[tokenId].owner;
+        
+(, , address token0, address token1, , , , uint128 liquidity, , , , ) =
+            nonfungiblePositionManager.positions(tokenId);
 
-        address token0 = deposits[tokenId].token0;
-        address token1 = deposits[tokenId].token1;
         // send collected fees to owner
         TransferHelper.safeTransfer(token0, owner, amount0);
         TransferHelper.safeTransfer(token1, owner, amount1);
@@ -244,10 +221,8 @@ modifier onlyOwner() {
     /// @param tokenId The id of the erc721
     function retrieveNFT(uint256 tokenId) external onlyOwner {
         // must be the owner of the NFT
-        require(msg.sender == deposits[tokenId].owner, 'Not the owner');
         // transfer ownership to original owner
         nonfungiblePositionManager.safeTransferFrom(address(this), msg.sender, tokenId);
         //remove information related to tokenId
-        delete deposits[tokenId];
     }
 }

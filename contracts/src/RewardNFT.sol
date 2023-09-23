@@ -11,13 +11,13 @@ contract RewardNFT is ERC721URIStorage {
 
     constructor() ERC721("HagiaSophiaContributor", "HSC") {}
 
-    function awardItem(address user)
+    function awardItem(address user, string memory tokenURI)
         public
         returns (uint256)
     {
         uint256 newItemId = _tokenIds.current();
         _mint(user, newItemId);
-        _setTokenURI(newItemId, "");
+        _setTokenURI(newItemId, tokenURI);
 
         _tokenIds.increment();
         return newItemId;

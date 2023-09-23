@@ -103,7 +103,8 @@ contract HagiaSophia {
             currentResearcher.totalFundingReceived = currentResearcher.totalFundingReceived + msg.value;
             researchers[researcherIds[i]] = currentResearcher;
         }
-        RewardNFT(0x8aF2Ecc68859c4A62A51650fcaA08E787b32A31c).awardItem(msg.sender);
+
+        RewardNFT(0x8aF2Ecc68859c4A62A51650fcaA08E787b32A31c).awardItem(msg.sender, "https://ipfs.io/ipfs/QmY7m1i78SQ3LHLYhJTmtwWK1Y4jpEahsUtS2WwEQVmGzn");
 
         emit FundingReceived(researchId, msg.value, msg.sender);
     }

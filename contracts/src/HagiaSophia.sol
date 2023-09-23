@@ -4,6 +4,8 @@ pragma solidity ^0.8.20;
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
 import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import "./RewardNFT.sol";
+import "./ResearcherNFT.sol";
+
 contract HagiaSophia {
 
     using SafeMath for uint256;
@@ -45,6 +47,7 @@ contract HagiaSophia {
         uint256 reviewDeadline;
         uint256 reviewFundingPercentage;
         bool paid;
+        string image;
     }
 
     struct Bounty {
@@ -114,6 +117,7 @@ contract HagiaSophia {
             Researcher({id: msg.sender, name: name, affiliation: affiliation, totalFundingReceived: 0});
 
         researchers[msg.sender] = researcher;
+        ResearcherNFT(0x019055b106302D458b457D5E9Dc9f95bF9bE81C2).awardItem(msg.sender, "https://ipfs.io/ipfs/QmY7m1i78SQ3LHLYhJTmtwWK1Y4jpEahsUtS2WwEQVmGzn");
 
         emit ResearcherCreated(msg.sender, name, affiliation);
     }
@@ -127,7 +131,8 @@ contract HagiaSophia {
         uint256 reviewFundingPercentage,
         address[] memory contributingResearchers,
         uint256 reviewerLimit,
-        uint256 reviewDeadline
+        uint256 reviewDeadline,
+        string memory image
     ) external {
         currentResearchId = currentResearchId + 1;
         Research memory research = Research({
@@ -144,7 +149,8 @@ contract HagiaSophia {
             reviewerLimit: reviewerLimit,
             reviewDeadline: block.timestamp + (reviewDeadline * 1 days),
             reviewFundingPercentage: reviewFundingPercentage,
-            paid: false
+            paid: false,
+            image: image
         });
 
         allResearch[currentResearchId] = research;
@@ -255,15 +261,11 @@ contract HagiaSophia {
 
         uint256 researchPercentage = currentResearch.reviewFundingPercentage;
 
-        emit PeerReviewerPaid(peerReviewId, msg.sender, researchPercentage);
         uint256 researchPeerReviewerAmount = currentResearch.reviewerLimit;
-        emit PeerReviewerPaid(peerReviewId, msg.sender, researchPeerReviewerAmount);
 
         uint256 researchFundCollected = currentResearch.fundingReceived;
-        emit PeerReviewerPaid(peerReviewId, msg.sender, researchFundCollected);
 
         uint256 toBePaid = researchFundCollected.div(researchPercentage.mul(fullPercent).div(researchPeerReviewerAmount));
-        emit PeerReviewerPaid(peerReviewId, msg.sender, toBePaid);
 
         currentPeerReview.paid = true;
         peerReviews[currentPeerReviewId] = currentPeerReview;

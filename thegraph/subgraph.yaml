@@ -1,0 +1,46 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Contract
+    network: mumbai
+    source:
+      address: "0x05736654e5651034c61b03031BDEf6f8676e605A"
+      abi: Contract
+      startBlock: 40412129
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - AppliedToBounty
+        - BountyCreated
+        - FundingReceived
+        - PeerReviewSubmitted
+        - PeerReviewerPaid
+        - ResearchCreated
+        - ResearcherChosen
+        - ResearcherCreated
+        - ResearcherPaid
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: AppliedToBounty(uint256,address)
+          handler: handleAppliedToBounty
+        - event: BountyCreated(uint256,string,string,string,uint256)
+          handler: handleBountyCreated
+        - event: FundingReceived(uint256,uint256,address)
+          handler: handleFundingReceived
+        - event: PeerReviewSubmitted(uint256,address,uint256,string,string,uint8)
+          handler: handlePeerReviewSubmitted
+        - event: ResearchCreated(uint256,string,string,string,uint8,address[],uint256,uint256,uint256,uint256)
+          handler: handleResearchCreated
+        - event: ResearcherChosen(uint256,address[])
+          handler: handleResearcherChosen
+        - event: ResearcherCreated(address,string,string)
+          handler: handleResearcherCreated
+        - event: ResearcherPaid(uint256,address,uint256)
+          handler: handleResearcherPaid
+      file: ./src/mappings/hagia.ts

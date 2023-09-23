@@ -1,0 +1,156 @@
+type Researcher @entity {
+  id: ID!
+  name: String! # string
+  affiliation: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  previousPeerReviews: [PeerReview!]!
+  previousResearch: [Research!]!
+  previousBounties: [Bounty!]!
+}
+
+type Research @entity {
+  id: ID!
+  title: String! # string
+  description: String! # string
+  documentUrl: String! # string
+  fundingType: Int! # uint8
+  contributingResearchers: [Bytes!]! # address[]
+  fundingLimit: BigInt! # uint256
+  reviewerLimit: BigInt! # uint256
+  reviewDeadline: BigInt! # uint256
+  reviewFundingPercentage: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  peerReviews: [PeerReview!]!
+  fundingReceived: BigInt!
+}
+
+type Bounty @entity {
+  id: ID!
+  title: String! # string
+  description: String! # string
+  documentUrl: String! # string
+  bountyAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  applications: [Bytes!]!
+  pickedResearchers: [Bytes!]!
+}
+
+type PeerReview @entity {
+  id: ID!
+  researcherId: Bytes! # address
+  researchId: BigInt!
+  peerReviewId: BigInt! # uint256
+  feedback: String! # string
+  documentUrl: String! # string
+  rating: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+
+type AppliedToBounty @entity(immutable: true) {
+  id: Bytes!
+  bountyId: BigInt! # uint256
+  applicant: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type BountyCreated @entity(immutable: true) {
+  id: Bytes!
+  Contract_id: BigInt! # uint256
+  title: String! # string
+  description: String! # string
+  documentUrl: String! # string
+  bountyAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type FundingReceived @entity(immutable: true) {
+  id: Bytes!
+  researchId: BigInt! # uint256
+  amount: BigInt! # uint256
+  from: Bytes! # address
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PeerReviewSubmitted @entity(immutable: true) {
+  id: Bytes!
+  researchId: BigInt! # uint256
+  researcherId: Bytes! # address
+  peerReviewId: BigInt! # uint256
+  feedback: String! # string
+  documentUrl: String! # string
+  rating: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PeerReviewerPaid @entity(immutable: true) {
+  id: Bytes!
+  peerReviewId: BigInt! # uint256
+  reviewer: Bytes! # address
+  paidAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResearchCreated @entity(immutable: true) {
+  id: Bytes!
+  Contract_id: BigInt! # uint256
+  title: String! # string
+  description: String! # string
+  documentUrl: String! # string
+  fundingType: Int! # uint8
+  contributingResearchers: [Bytes!]! # address[]
+  fundingLimit: BigInt! # uint256
+  reviewerLimit: BigInt! # uint256
+  reviewDeadline: BigInt! # uint256
+  reviewFundingPercentage: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResearcherChosen @entity(immutable: true) {
+  id: Bytes!
+  bountyId: BigInt! # uint256
+  selectedResearchers: [Bytes!]! # address[]
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResearcherCreated @entity(immutable: true) {
+  id: Bytes!
+  Contract_id: Bytes! # address
+  name: String! # string
+  affiliation: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type ResearcherPaid @entity(immutable: true) {
+  id: Bytes!
+  researchId: BigInt! # uint256
+  mainResearcher: Bytes! # address
+  paidAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

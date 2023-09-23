@@ -2,7 +2,8 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/utils/math/SafeMath.sol";
-
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "./RewardNFT.sol";
 contract HagiaSophia {
 
     using SafeMath for uint256;
@@ -102,6 +103,7 @@ contract HagiaSophia {
             currentResearcher.totalFundingReceived = currentResearcher.totalFundingReceived + msg.value;
             researchers[researcherIds[i]] = currentResearcher;
         }
+        RewardNFT(0x8aF2Ecc68859c4A62A51650fcaA08E787b32A31c).awardItem(msg.sender);
 
         emit FundingReceived(researchId, msg.value, msg.sender);
     }

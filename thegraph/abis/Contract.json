@@ -210,6 +210,12 @@
         "internalType": "uint256",
         "name": "reviewFundingPercentage",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "string",
+        "name": "image",
+        "type": "string"
       }
     ],
     "name": "ResearchCreated",
@@ -315,7 +321,8 @@
         "name": "reviewFundingPercentage",
         "type": "uint256"
       },
-      { "internalType": "bool", "name": "paid", "type": "bool" }
+      { "internalType": "bool", "name": "paid", "type": "bool" },
+      { "internalType": "string", "name": "image", "type": "string" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -403,7 +410,12 @@
         "type": "address[]"
       },
       { "internalType": "uint256", "name": "reviewerLimit", "type": "uint256" },
-      { "internalType": "uint256", "name": "reviewDeadline", "type": "uint256" }
+      {
+        "internalType": "uint256",
+        "name": "reviewDeadline",
+        "type": "uint256"
+      },
+      { "internalType": "string", "name": "image", "type": "string" }
     ],
     "name": "createResearch",
     "outputs": [],

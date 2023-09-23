@@ -166,6 +166,7 @@ import { BIG_INT_ZERO } from "../lib/constants";
     entity.transactionHash = event.transaction.hash
     entity.peerReviews = []
     entity.fundingReceived = BIG_INT_ZERO
+    entity.image = event.params.image
     
   
     entity.save()

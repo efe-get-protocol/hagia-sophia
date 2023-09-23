@@ -1,5 +1,4 @@
 forge-std/=lib/forge-std/src/
 @openzeppelin/=lib/openzeppelin-contracts/
-@openzeppelin-contracts-upgradeable/=lib/openzeppelin-contracts-upgradeable/
-@uniswap/v3-core/=lib/v3-core
-@uniswap/v3-periphery/=lib/v3-periphery
+@uniswap/v3-core/=lib/v3-core/
+@uniswap/v3-periphery/=lib/v3-periphery/

@@ -1,0 +1,12 @@
+{
+  "name": "hagia-sophia",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/efe-get-protocol/hagia-sophia.git",
+  "author": "efe-get-protocol <111286837+efe-get-protocol@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@graphprotocol/graph-cli": "^0.52.0",
+    "@graphprotocol/graph-ts": "^0.31.0"
+  }
+}

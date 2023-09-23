@@ -11,3 +11,6 @@
 [submodule "uniswap/lib/v3-periphery"]
 	path = uniswap/lib/v3-periphery
 	url = https://github.com/uniswap/v3-periphery
+[submodule "uniswap/lib/openzeppelin-contracts"]
+	path = uniswap/lib/openzeppelin-contracts
+	url = https://github.com/openzeppelin/openzeppelin-contracts

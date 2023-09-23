@@ -5,6 +5,7 @@ import Crowdfunding from './pages/Crowdfunding/Crowdfunding.js';
 import Bounties from './pages/Bounties/Bounties.js'
 import Review from './pages/Review/Review.js'
 import Research from './pages/Research/Research.js'
+import Login from './pages/Login/Login.js'
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
         <Route path='/Bounties' element={ <Bounties/> } />
         <Route path='/Review' element={ <Review/> } />
         <Route path='/Research' element={ <Research/> } />
+        <Route path='/Login' element={<Login/>} />
       </Routes>
     </div>
   );

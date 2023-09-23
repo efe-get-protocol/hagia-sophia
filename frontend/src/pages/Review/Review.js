@@ -1,10 +1,12 @@
 import React from 'react'
-import 'Review.css'
+import './Review.css'
 
 const Review = () => {
   return (
-    <div>Review</div>
+    <div>
+      <h1>Reviews Landing Page!</h1>
+    </div>
   )
 }
 
-export default Review
+export default Review;

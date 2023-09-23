@@ -10,19 +10,10 @@ import {
     ResearcherPaid as ResearcherPaidEvent
   } from "../../../thegraph/generated/Contract/Contract"
   import {
-    AppliedToBounty,
     Bounty,
-    BountyCreated,
-    FundingReceived,
     PeerReview,
-    PeerReviewSubmitted,
-    PeerReviewerPaid,
     Research,
-    ResearchCreated,
     Researcher,
-    ResearcherChosen,
-    ResearcherCreated,
-    ResearcherPaid
   } from "../../../thegraph/generated/schema"
   
   import {BigInt, Bytes} from '@graphprotocol/graph-ts'
@@ -91,7 +82,9 @@ import { BIG_INT_ZERO } from "../lib/constants";
   export function handleAppliedToBounty(event: AppliedToBountyEvent): void {
   let bounty = getBounty(event.params.bountyId.toString())
 
-  bounty.applications.push(event.params.applicant);
+  const tempArray = bounty.applications
+  tempArray.push(event.params.applicant);
+  bounty.applications = tempArray
   bounty.save()
   }
   
@@ -141,11 +134,15 @@ import { BIG_INT_ZERO } from "../lib/constants";
     entity.save()
 
     let research = getResearch(event.params.researchId.toString());
-    research.peerReviews.push(event.params.peerReviewId.toString());
+    const tempArray = research.peerReviews
+    tempArray.push(event.params.peerReviewId.toString());
+    research.peerReviews = tempArray;
     research.save()
 
-    let researcher = getResearcher(event.params.researcherId.toString())
-    researcher.previousPeerReviews.push(event.params.peerReviewId.toString());
+    let researcher = getResearcher(event.params.researcherId.toHexString())
+    const tempArray2 = researcher.previousPeerReviews
+    tempArray2.push(event.params.peerReviewId.toString());
+    researcher.previousPeerReviews = tempArray2
     researcher.save()
   }
   
@@ -170,21 +167,38 @@ import { BIG_INT_ZERO } from "../lib/constants";
     entity.fundingReceived = BIG_INT_ZERO
   
     entity.save()
+
+   for(let i = 0; i<entity.contributingResearchers.length; i++){
+      let researcher = getResearcher(entity.contributingResearchers[i].toHexString());
+      const tempArray = researcher.previousResearch
+      tempArray.push(event.params.id.toString());
+      researcher.previousResearch = tempArray;
+      researcher.save();
+   }
   }
   
   export function handleResearcherChosen(event: ResearcherChosenEvent): void {
     let bounty = getBounty(event.params.bountyId.toString())
     let selectedResearchers = event.params.selectedResearchers
     for (let i = 0; i < selectedResearchers.length; i++) {
-      bounty.pickedResearchers.push(selectedResearchers[i]);
-        }    
+      const tempArray = bounty.pickedResearchers;
+      tempArray.push(selectedResearchers[i]);
+      bounty.pickedResearchers = tempArray;
+
+      let researcher = getResearcher(selectedResearchers[i].toHexString());
+      const tempArray2 = researcher.previousBounties;
+      tempArray2.push(event.params.bountyId.toString());
+      researcher.previousBounties = tempArray2
+      researcher.save()
+      }    
       bounty.save();
+
     
   }
   
   export function handleResearcherCreated(event: ResearcherCreatedEvent): void {
     let entity = new Researcher(
-      event.params.id.toString()
+      event.params.id.toHexString()
     )
     entity.name = event.params.name
     entity.affiliation = event.params.affiliation

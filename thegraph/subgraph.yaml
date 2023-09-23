@@ -6,7 +6,7 @@ dataSources:
     name: Contract
     network: mumbai
     source:
-      address: "0x05736654e5651034c61b03031BDEf6f8676e605A"
+      address: "0x57415e1782b4EA7b6553d9b1e5ad7F999c7411A0"
       abi: Contract
       startBlock: 40412129
     mapping:
@@ -14,15 +14,10 @@ dataSources:
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - AppliedToBounty
-        - BountyCreated
-        - FundingReceived
-        - PeerReviewSubmitted
-        - PeerReviewerPaid
-        - ResearchCreated
-        - ResearcherChosen
-        - ResearcherCreated
-        - ResearcherPaid
+        - Research
+        - Researcher
+        - PeerReview
+        - Bounty
       abis:
         - name: Contract
           file: ./abis/Contract.json
@@ -41,6 +36,4 @@ dataSources:
           handler: handleResearcherChosen
         - event: ResearcherCreated(address,string,string)
           handler: handleResearcherCreated
-        - event: ResearcherPaid(uint256,address,uint256)
-          handler: handleResearcherPaid
       file: ./src/mappings/hagia.ts

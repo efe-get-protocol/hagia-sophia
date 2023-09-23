@@ -1,7 +1,12 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.20;
 
+import "@openzeppelin/contracts/utils/math/SafeMath.sol";
+
 contract HagiaSophia {
+
+    using SafeMath for uint256;
+
     enum FundingType {
         CROWDFUNDING,
         SELF_FUNDED
@@ -214,7 +219,7 @@ contract HagiaSophia {
         external
     {
         Research memory currentResearch = allResearch[researchId];
-        require(block.timestamp < currentResearch.reviewDeadline, "PR_DEADLINE_PASSED");
+        // require(block.timestamp < currentResearch.reviewDeadline, "PR_DEADLINE_PASSED");
         require(currentResearch.peerReviews.length < currentResearch.reviewerLimit);
         currentPeerReviewId = currentPeerReviewId + 1;
         PeerReview memory currentReview = PeerReview({
@@ -233,18 +238,29 @@ contract HagiaSophia {
     }
 
     function claimPeerReviewPrize(uint256 peerReviewId) external {
+        uint256 fullPercent = 100;
+
         PeerReview memory currentPeerReview = peerReviews[peerReviewId];
+
         uint256 peerReviewResearch = currentPeerReview.researchId;
+        emit PeerReviewerPaid(peerReviewId, msg.sender, peerReviewResearch);
+
         Research memory currentResearch = allResearch[peerReviewResearch];
 
-        require(currentPeerReview.researcherId == msg.sender, "DID_NOT_PEER_REVIEW_THIS");
-        require(block.timestamp > currentResearch.reviewDeadline, "DEADLINE_DID_NOT_PASS_YET");
+        // require(currentPeerReview.researcherId == msg.sender, "DID_NOT_PEER_REVIEW_THIS");
+        // require(block.timestamp > currentResearch.reviewDeadline, "DEADLINE_DID_NOT_PASS_YET");
 
         uint256 researchPercentage = currentResearch.reviewFundingPercentage;
-        uint256 researchPeerReviewerAmount = currentResearch.peerReviews.length;
-        uint256 researchFundCollected = currentResearch.fundingReceived;
 
-        uint256 toBePaid = researchFundCollected / (researchPercentage * 100 / researchPeerReviewerAmount);
+        emit PeerReviewerPaid(peerReviewId, msg.sender, researchPercentage);
+        uint256 researchPeerReviewerAmount = currentResearch.reviewerLimit;
+        emit PeerReviewerPaid(peerReviewId, msg.sender, researchPeerReviewerAmount);
+
+        uint256 researchFundCollected = currentResearch.fundingReceived;
+        emit PeerReviewerPaid(peerReviewId, msg.sender, researchFundCollected);
+
+        uint256 toBePaid = researchFundCollected.div(researchPercentage.mul(fullPercent).div(researchPeerReviewerAmount));
+        emit PeerReviewerPaid(peerReviewId, msg.sender, toBePaid);
 
         currentPeerReview.paid = true;
         peerReviews[currentPeerReviewId] = currentPeerReview;
@@ -255,13 +271,20 @@ contract HagiaSophia {
     }
 
     function claimFunds(uint256 researchId) external {
+        uint256 fullPercent = 100;
         Research memory currentResearch = allResearch[researchId];
-        uint256 researchPercentage = 100 - currentResearch.reviewFundingPercentage;
+        
+        uint256 reviewerPercentage = currentResearch.reviewFundingPercentage;
+
         uint256 researchFundCollected = currentResearch.fundingReceived;
+        require(researchFundCollected > 0, "NO_FUNDS_COLLECTED");
+
         address mainResearcher = currentResearch.researcherIds[0];
-        currentResearch.paid = false;
+        currentResearch.paid = true;
         allResearch[researchId] = currentResearch;
-        uint256 toBePaid = researchPercentage / 100 * researchFundCollected;
+        
+        uint256 toBePaid = researchFundCollected.sub(researchFundCollected.mul(reviewerPercentage).div(fullPercent));
+
         payable(mainResearcher).transfer(toBePaid);
 
         emit ResearcherPaid(researchId, mainResearcher, toBePaid);

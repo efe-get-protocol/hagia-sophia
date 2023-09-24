@@ -9,9 +9,12 @@ const { ethers } = require("ethers");
 const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
 const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`)
 
-const privateKey = '' // Private key of account 1
-const contractAddress = "YOUR_CONTRACT_ADDRESS";
+const privateKey = 'd25d586238b2809ddc2b3d77d55a0add701d84d9dc31449138214992f3e2db10' // Private key of account 1
+const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
 const wallet = new ethers.Wallet(privateKey, provider);
+
+const contractABI = ["function createResearch(string,string,string,uint8,uint256,uint256,address[],uint256,uint256,string) view returns ()"];
+const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
 const styles = {
     form: {
@@ -51,9 +54,15 @@ const ResearchForm = () => {
       const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission here This is where etherjs
+        try {
+          const tx =  contract.connect(wallet).createResearch(formData.title, formData.description, formData.documentUrl, 0, formData.fundingLimit, formData.reviewFundingPercentage, [],formData.reviewerLimit, 0, formData.image);
+          const receipt = tx.wait();
+          
+        } catch (error) {
+          console.error("Error:", error);
+        }
 
-
-        console.log(formData);
+        
       };
     
       return (

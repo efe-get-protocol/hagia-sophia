@@ -2,12 +2,13 @@ import React, {useState} from "react";
 import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
-import {ethers} from 'ethers';
+import {ethers, BigNumber} from 'ethers';
 
 const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
-const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/e18cea1fcdc44e6a84e5ab03efd311af`)
+const provider = new ethers.providers.JsonRpcProvider(`https://polygon-mainnet.g.alchemy.com/v2/Qni5uO72dYJS_s5J74W5ptgQmOVISuUS`)
 
-const privateKey = 'd25d586238b2809ddc2b3d77d55a0add701d84d9dc31449138214992f3e2db10' // Private key of account 1
+const publicKey = "0x30D38078D6117285d6730F971d3F50A9004a575B"
+const privateKey = '' // Private key of account 1
 const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
 const wallet = new ethers.Wallet(privateKey, provider);
 
@@ -48,24 +49,41 @@ const ResearchForm = () => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
       };
-    
-      const handleSubmit = async () => {
-        // e.preventDefault();
+      async function executeTransaction(approveTxUnsigned) {
+        approveTxUnsigned.chainId = 137;
+        approveTxUnsigned.nonce = await provider.getTransactionCount(publicKey);
+        approveTxUnsigned.gasPrice = await provider.getGasPrice()
+        approveTxUnsigned.gasLimit = 2000000
+        console.log("nonce", approveTxUnsigned.nonce)
+        const approveTxSigned = await wallet.signTransaction(approveTxUnsigned);
+        console.log("signed", approveTxSigned)
+
+        const submittedTx = await provider.sendTransaction(approveTxSigned);
+        console.log("submitted", submittedTx)
+
+        const approveReceipt = await submittedTx.wait();
+        console.log("receipet", approveReceipt)
+        return approveReceipt;
+      }
+      const handleSubmit = async (e) => {
+        e.preventDefault();
         // Handle form submission here This is where etherjs
         try {
-          const tx =  await contract.connect(wallet).createResearch(formData.title, formData.description, formData.documentUrl, 0, formData.fundingLimit, formData.reviewFundingPercentage, [],formData.reviewerLimit, 0, formData.image);
+          console.log("hello")
+          const tx =  await contract.connect(wallet).populateTransaction.createResearch(formData.title, formData.description, formData.documentUrl, 0,  BigNumber.from(formData.fundingLimit), BigNumber.from(formData.reviewFundingPercentage), [],  BigNumber.from(formData.reviewerLimit),  BigNumber.from(0), "url");
           console.log("tx", tx)
+          const ret = await executeTransaction(tx);
+          console.log(ret)
         } catch (error) {
           console.error("Error:", error);
         }
 
         
       };
-    
       return (
         <div className="research-form">
           <h1>Please fill out the information below and wait for approval.</h1>
-        <form style={styles.form} onSubmit={handleSubmit}>
+        <form style={styles.form} onSubmit={(e) => handleSubmit(e)}>
             <TextField
                 label="Title"
                 name="title"
@@ -177,6 +195,7 @@ const ResearchForm = () => {
             variant="contained"
             color="primary"
             style={styles.submitButton}
+            
             endIcon={<SendIcon />}
           >
             Submit

@@ -135,10 +135,10 @@ const NavigationBar = () => {
             ))}
           </Box>
           <Web3Button />
-          <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+          <Box sx={{ paddingLeft: '30px', flexGrow: 0 }}>
+            <Tooltip title="Open Profile">
+              <IconButton component={Link} to='/Profile' sx={{ p: 0 }}>
+                <Avatar alt="Remy Sharp" src="person.png" />
               </IconButton>
             </Tooltip>
             <Menu

@@ -17,6 +17,7 @@ import { useMemo } from 'react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import BountyForm from './pages/Application/BountyForm'
 import { PROJECT_ID_WALLET_CONNECT } from "./env.js";
+import Profile from './pages/Profile/Profile'
 
 
 const chains = [polygon]
@@ -64,6 +65,7 @@ function App() {
         <Route path='/Login' element={<Login/>} />
         <Route path='/ResearchForm' element={<ResearchForm/>} />
         <Route path='/BountyForm' element={<BountyForm/>} />
+        <Route path='/Profile' element={<Profile />} />
         
       </Routes>
       </ResearchProvider>

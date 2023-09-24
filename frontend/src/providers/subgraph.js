@@ -13,6 +13,7 @@ const stateValues = {
   previousResearch: [],
   userNfts: [],
   isResearcher: false,
+  researcherData: {}
 };
 
 const contextValues = {
@@ -65,7 +66,7 @@ export const ResearchProvider = ({ children }) => {
         );
 
         const json = await response.json();
-        const result = json.result.totalItems;
+        const result = json.result.assets;
         console.log(result);
         return result;
       }
@@ -200,7 +201,29 @@ export const ResearchProvider = ({ children }) => {
       console.error(error);
     }
   }, []);
+  const fetchResearcherData = useCallback(async (walletAddress) => {
+    try {
+      if(walletAddress){
+      const result = await polygonApolloClient.query({
+        query: gql`
+          query {
+            researcher(id: "${walletAddress.toLowerCase()}") {
+              id
+              affiliation
+              name
+            }
+          }
+        `,
+      });
 
+      const researcher = result.data.researcher;
+      console.log("reseras", researcher)
+      return researcher;
+    }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
   const verifyResearcher = useCallback(async (walletAddress) => {
     if (address != undefined) {
       var myHeaders = new Headers();
@@ -251,6 +274,7 @@ export const ResearchProvider = ({ children }) => {
       previousResearch,
       userNfts,
       isResearcher,
+      researcherData
     ] = await Promise.all([
       fetchBounties(),
       fetchPeerReviews(),
@@ -259,6 +283,7 @@ export const ResearchProvider = ({ children }) => {
       fetchPreviousResearch(address),
       fetchNFTs(address),
       verifyResearcher(address),
+      fetchResearcherData(address)
     ]);
 
     setState((prevState) => {
@@ -271,7 +296,8 @@ export const ResearchProvider = ({ children }) => {
         previousPeerReviews: previousPeerReviews,
         previousResearch: previousResearch,
         userNfts: userNfts,
-        isResearcher: isResearcher
+        isResearcher: isResearcher,
+        researcherData: researcherData
       };
     });
   }, []);

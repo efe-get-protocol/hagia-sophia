@@ -11,6 +11,7 @@ import MuiAlert from "@mui/material/Alert";
 import { parseEther } from "viem";
 import { useState, useContext } from "react";
 import { ResearchContext, ResearchProvider } from "../../providers/subgraph";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 
 const styles = {
   form: {
@@ -226,8 +227,7 @@ export function ClaimFunds(props) {
   });
 
   return (
-    <div className="research-form">
-      <div style={styles.form}>
+      <div >
         <Button
           variant="contained"
           style={styles.submitButton}
@@ -242,7 +242,6 @@ export function ClaimFunds(props) {
             Successfully Submitted Crowdfunding Contract Application!
         </MuiAlert>
       </Snackbar> */}
-      </div>
     </div>
   );
 }
@@ -275,8 +274,7 @@ export function ClaimPeerReviewPrize(props) {
   });
 
   return (
-    <div className="research-form">
-      <div style={styles.form}>
+      <div>
         <Button
           variant="contained"
           endIcon={<MonetizationOnIcon />}
@@ -291,7 +289,6 @@ export function ClaimPeerReviewPrize(props) {
         </MuiAlert>
       </Snackbar> */}
       </div>
-    </div>
   );
 }
 

@@ -19,6 +19,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import { ResearchContext } from '../../providers/subgraph';
+import { useAccount } from 'wagmi';
+import { ClaimFunds, ClaimPeerReviewPrize } from '../../components/SendTransaction/sendTransactionWagmi';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -31,22 +33,33 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Profile = () => {
   // Define user data (you can fetch this from an API or other source)
-
+  const {researcherData} = useContext(ResearchContext)
+  const {address} = useAccount()
   const [isClaimPrizeDialogOpen, setIsClaimPrizeDialogOpen] = useState(false);
   const [isClaimFundDialogOpen, setIsClaimFundDialogOpen] = useState(false);
   const [alertSuccess, setAlertSuccess] = useState(false);
   const [researcherId, setResearcherId] = useState(''); // Initialize the state
   const [peerRevId, setPeerRevId] = useState('')
 
+let userData;
+if(researcherData){
+  userData = {
+    name: researcherData.name,
+    affiliation: researcherData.affiliation,
+    imageURL: 'hagia_sophia_logo.jpg',
+    walletAddress: address
+  }
+}
 
-
-  const userData = {
+else {
+  userData = {
     name: 'John Doe',
     affiliation: 'University XYZ',
     walletAddress: '0x1234567890abcdef',
     imageURL: 'hagia_sophia_logo.jpg'
     // Add more fields as needed
   };
+}
 
   const handleClaimPrizeClick = () => {
     setIsClaimPrizeDialogOpen(true);
@@ -107,9 +120,7 @@ const Profile = () => {
         <Button onClick={() => setIsClaimPrizeDialogOpen(false)} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleClaimPrize} color="primary">
-          Submit
-        </Button>
+        <ClaimFunds researcherId={researcherId}/>
       </DialogActions>
       </Dialog>
 
@@ -140,9 +151,7 @@ const Profile = () => {
         <Button onClick={() => setIsClaimFundDialogOpen(false)} color="primary">
           Cancel
         </Button>
-        <Button onClick={handlePeerReviewPrize} color="primary">
-          Submit
-        </Button>
+        <ClaimPeerReviewPrize peerReviewId={peerRevId}/>
       </DialogActions>
       </Dialog>
 

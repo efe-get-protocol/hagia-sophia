@@ -6,6 +6,8 @@ import {
 } from 'wagmi'
 import SendIcon from '@mui/icons-material/Send';
 import { TextField, Button} from "@mui/material";
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 const styles = {
   form: {
@@ -93,6 +95,11 @@ export function CreateResearchWagmi(props) {
             disabled={!write || isLoading} onClick={() => write()}>
         {isLoading ? 'Submitting' : 'Submit'}
       </Button>
+      {/* <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
+            Successfully Submitted Crowdfunding Contract Application!
+        </MuiAlert>
+      </Snackbar> */}
       {(isPrepareError || isError) && (
         <div>Error: {(prepareError || error)?.message}</div>
       )}

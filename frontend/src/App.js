@@ -16,11 +16,11 @@ import { ResearchProvider } from './providers/subgraph';
 import { useMemo } from 'react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import BountyForm from './pages/Application/BountyForm'
-import { WALLET_CONNECT_ID } from "./env";
+import { PROJECT_ID_WALLET_CONNECT } from "./env.js";
 
 
 const chains = [polygon]
-const projectId = WALLET_CONNECT_ID;
+const projectId = PROJECT_ID_WALLET_CONNECT;
 
 const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
 const wagmiConfig = createConfig({

@@ -11,7 +11,8 @@ const stateValues = {
   peerReviews: [],
   previousPeerReviews: [],
   previousResearch: [],
-  userNfts:[]
+  userNfts: [],
+  isResearcher: false,
 };
 
 const contextValues = {
@@ -34,39 +35,38 @@ export const ResearchProvider = ({ children }) => {
     try {
       if (address != undefined) {
         var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify({
-      id: 67,
-      jsonrpc: "2.0",
-      method: "qn_fetchNFTs",
-      params: [
-        {
-          wallet: walletAddress,
-          omitFields: ["traits"],
-          page: 1,
-          perPage: 10,
-          contracts: ["0xD9e9927098DcEA8a6D6698c77922B4588C2aA9E4"],
-        },
-      ],
-    });
+        var raw = JSON.stringify({
+          id: 67,
+          jsonrpc: "2.0",
+          method: "qn_fetchNFTs",
+          params: [
+            {
+              wallet: walletAddress,
+              omitFields: ["traits"],
+              page: 1,
+              perPage: 10,
+              contracts: ["0xD9e9927098DcEA8a6D6698c77922B4588C2aA9E4"],
+            },
+          ],
+        });
 
-    var requestOptions = {
-      method: "POST",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+        var requestOptions = {
+          method: "POST",
+          headers: myHeaders,
+          body: raw,
+          redirect: "follow",
+        };
 
-      const response = await fetch(
-        "https://skilled-warmhearted-diamond.matic.discover.quiknode.pro/bdd60ff4553d1623a24612e789066236ba54e938/",
-        requestOptions
-      )
-        
-      
-      const json = await response.json()
-      const result = json.result.totalItems;
-      console.log(result)
+        const response = await fetch(
+          "https://skilled-warmhearted-diamond.matic.discover.quiknode.pro/bdd60ff4553d1623a24612e789066236ba54e938/",
+          requestOptions
+        );
+
+        const json = await response.json();
+        const result = json.result.totalItems;
+        console.log(result);
         return result;
       }
     } catch (error) {
@@ -201,6 +201,42 @@ export const ResearchProvider = ({ children }) => {
     }
   }, []);
 
+  const verifyResearcher = useCallback(async (walletAddress) => {
+    if (address != undefined) {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify([
+        {
+          id: 67,
+          method: "qn_verifyNFTsOwner",
+          params: [
+            {
+              wallet: walletAddress,
+              contracts: ["0x019055b106302D458b457D5E9Dc9f95bF9bE81C2"],
+            },
+          ],
+        },
+      ]);
+
+      var requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: raw,
+        redirect: "follow",
+      };
+
+      const response = await fetch(
+        "https://skilled-warmhearted-diamond.matic.discover.quiknode.pro/bdd60ff4553d1623a24612e789066236ba54e938/",
+        requestOptions
+      );
+      const result = await response.json();
+      return result[0].result.assets.length > 0;
+    }
+
+    return false;
+  }, []);
+
   const fetchSubgraphData = useCallback(async (address) => {
     setState(() => {
       return {
@@ -214,14 +250,16 @@ export const ResearchProvider = ({ children }) => {
       researches,
       previousPeerReviews,
       previousResearch,
-      userNfts
+      userNfts,
+      isResearcher,
     ] = await Promise.all([
       fetchBounties(),
       fetchPeerReviews(),
       fetchResearches(),
       fetchPreviousPeerReviews(address),
       fetchPreviousResearch(address),
-      fetchNFTs(address)
+      fetchNFTs(address),
+      verifyResearcher(address),
     ]);
 
     setState((prevState) => {
@@ -233,7 +271,7 @@ export const ResearchProvider = ({ children }) => {
         researches: researches,
         previousPeerReviews: previousPeerReviews,
         previousResearch: previousResearch,
-        userNfts: userNfts
+        userNfts: userNfts,
       };
     });
   }, []);

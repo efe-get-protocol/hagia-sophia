@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -18,6 +18,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { ResearchContext } from '../../providers/subgraph';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -30,12 +31,6 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Profile = () => {
   // Define user data (you can fetch this from an API or other source)
-
-  const [isClaimPrizeDialogOpen, setIsClaimPrizeDialogOpen] = useState(false);
-  const [isClaimFundDialogOpen, setIsClaimFundDialogOpen] = useState(false);
-  const [alertSuccess, setAlertSuccess] = useState(false);
-  const [researcherId, setResearcherId] = useState(''); // Initialize the state
-  const [peerRevId, setPeerRevId] = useState('')
 
   const userData = {
     name: 'John Doe',

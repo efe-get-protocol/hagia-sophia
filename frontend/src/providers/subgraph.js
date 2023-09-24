@@ -1,13 +1,16 @@
-import { createContext, useCallback, useEffect, useState } from 'react';
+import { createContext, useCallback, useEffect, useState } from "react";
+import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
 const stateValues = {
   contractIsLoading: true,
   researches: [],
   researchers: [],
   bounties: [],
-  peerReviews: [], 
+  peerReviews: [],
+  previousPeerReviews: [],
+  previousResearch: []
 };
 
 const contextValues = {
@@ -18,10 +21,9 @@ const contextValues = {
 export const ResearchContext = createContext(contextValues);
 
 export const ResearchProvider = ({ children }) => {
-
-  const [state, setState] = useState({
-  });
-
+  const [state, setState] = useState({});
+  const { address,isConnected } = useAccount()
+  console.log(address)
   const polygonApolloClient = new ApolloClient({
     uri: "https://api.thegraph.com/subgraphs/name/efesozen7/hagia-sophia-2",
     cache: new InMemoryCache(),
@@ -29,22 +31,21 @@ export const ResearchProvider = ({ children }) => {
 
   const fetchResearches = useCallback(async () => {
     try {
-        const result = await polygonApolloClient.query({
-            query: gql`
-              query {
-                researches(first: 10) {
-                  description
-                  documentUrl
-                  fundingLimit
-                  fundingReceived
-                  title
-                  image
-                }
-              }
-            `,
-          })
+      const result = await polygonApolloClient.query({
+        query: gql`
+          query {
+            researches(first: 10) {
+              description
+              documentUrl
+              fundingLimit
+              fundingReceived
+              title
+              image
+            }
+          }
+        `,
+      });
 
-      // Filter out memories with invalid JSON, and parse valid JSON
       const researches = result.data.researches;
 
       return researches;
@@ -53,20 +54,20 @@ export const ResearchProvider = ({ children }) => {
     }
   }, []);
 
-  const fetchBounties= useCallback(async () => {
+  const fetchBounties = useCallback(async () => {
     try {
-        const result = await polygonApolloClient.query({
-            query: gql`
-              query {
-                bounties(first: 10) {
-                  bountyAmount
-                  description
-                  documentUrl
-                  title
-                }
-              }
-            `,
-          })
+      const result = await polygonApolloClient.query({
+        query: gql`
+          query {
+            bounties(first: 10) {
+              bountyAmount
+              description
+              documentUrl
+              title
+            }
+          }
+        `,
+      });
 
       const bounties = result.data.bounties;
 
@@ -78,20 +79,20 @@ export const ResearchProvider = ({ children }) => {
 
   const fetchPeerReviews = useCallback(async () => {
     try {
-        const result = await polygonApolloClient.query({
-            query: gql`
-              query {
-                peerReviews(first: 10) {
-                  feedback
-                  peerReviewId
-                  researchId
-                  researcherId
-                  documentUrl
-                  rating
-                }
-              }
-            `,
-          })
+      const result = await polygonApolloClient.query({
+        query: gql`
+          query {
+            peerReviews(first: 10) {
+              feedback
+              peerReviewId
+              researchId
+              researcherId
+              documentUrl
+              rating
+            }
+          }
+        `,
+      });
 
       const peerReviews = result.data.peerReviews;
 
@@ -101,28 +102,91 @@ export const ResearchProvider = ({ children }) => {
     }
   }, []);
 
-  const fetchSubgraphData = useCallback(async () => {
+  const fetchPreviousResearch = useCallback(async (address) => {
+    try {
+      if(address != undefined) {const result = await polygonApolloClient.query({
+        query:
+          gql`
+          query{
+                researcher(id: "${address.toLowerCase()}") {
+                  previousResearch(first: 10) {
+                        description
+                  title
+                  documentUrl
+                    id
+                  }
+                }
+              }
+            `,
+      });
+
+      const previousResearch = result.data.researcher.previousResearch;
+
+      return previousResearch;}
+      
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const fetchPreviousPeerReviews = useCallback(async (address) => {
+    try {
+      if(address != undefined){
+        const result = await polygonApolloClient.query({
+        query:
+          gql`
+        query{
+                researcher(id: "${address.toLowerCase()}") {
+                  previousPeerReviews(first: 10) {
+                        feedback
+                  researchId
+                  documentUrl
+                    rating
+                  }
+                }
+              }
+            `,
+      });
+
+      const previousPeerReviews = result.data.researcher.previousPeerReviews;
+
+      return previousPeerReviews;
+    }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
+
+  const fetchSubgraphData = useCallback(async (address) => {
     setState(() => {
       return {
         contractIsLoading: true,
       };
     });
 
-    const [bounties, peerReviews, researches] = await Promise.all([fetchBounties(), fetchPeerReviews(), fetchResearches()]);
+    const [bounties, peerReviews, researches, previousPeerReviews, previousResearch] = await Promise.all([
+      fetchBounties(),
+      fetchPeerReviews(),
+      fetchResearches(),
+      fetchPreviousPeerReviews(address),
+      fetchPreviousResearch(address)
+    ]);
 
-    setState(prevState => {
+    setState((prevState) => {
       return {
         ...prevState,
         contractIsLoading: false,
         bounties: bounties,
         peerReviews: peerReviews,
         researches: researches,
+        previousPeerReviews: previousPeerReviews,
+        previousResearch: previousResearch
       };
     });
   }, []);
 
   useEffect(() => {
-    fetchSubgraphData();
+    fetchSubgraphData(address);
   }, []);
 
   return (

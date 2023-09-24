@@ -13,7 +13,7 @@ const Bounties = () => {
 
 
 
-  return (
+  if(bounties) return (
     <div>
       <br/>
       <Button component={Link} to="/BountyForm" variant="contained" endIcon={<SendIcon />} >Create Bounty</Button>

@@ -11,8 +11,7 @@ import { ResearchContext,  } from "../../providers/subgraph";
 const Crowdfunding = () => {
   const {  researches } = useContext(ResearchContext);
 
-  console.log(researches)
-        return (
+  if(researches) return (
     <div>
       <br/>
       <Button component={Link} to="/ResearchForm" variant="contained" endIcon={<SendIcon />} >Create Crowdfunding Contract</Button>

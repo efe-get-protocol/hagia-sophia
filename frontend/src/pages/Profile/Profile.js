@@ -32,6 +32,14 @@ const Item = styled(Paper)(({ theme }) => ({
 const Profile = () => {
   // Define user data (you can fetch this from an API or other source)
 
+  const [isClaimPrizeDialogOpen, setIsClaimPrizeDialogOpen] = useState(false);
+  const [isClaimFundDialogOpen, setIsClaimFundDialogOpen] = useState(false);
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [researcherId, setResearcherId] = useState(''); // Initialize the state
+  const [peerRevId, setPeerRevId] = useState('')
+
+
+
   const userData = {
     name: 'John Doe',
     affiliation: 'University XYZ',

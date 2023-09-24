@@ -12,6 +12,7 @@ import Review from './pages/Review/Review.js'
 import Research from './pages/Research/Research.js'
 import Login from './pages/Login/Login.js'
 import ResearchForm from './pages/Application/ResearchForm'
+import Collections from './pages/Collections/Collections';
 import { ResearchProvider } from './providers/subgraph';
 import { useMemo } from 'react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
@@ -66,6 +67,7 @@ function App() {
         <Route path='/ResearchForm' element={<ResearchForm/>} />
         <Route path='/BountyForm' element={<BountyForm/>} />
         <Route path='/Profile' element={<Profile />} />
+        <Route path='/Collections' element={<Collections/>} />
         
       </Routes>
       </ResearchProvider>

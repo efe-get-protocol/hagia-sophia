@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { TextField, Box } from "@mui/material";
-import { Link } from "react-router-dom";
-import SendIcon from "@mui/icons-material/Send";
-import { privateKey } from "../../env";
+
 // import {BigInt} from 'viem'
 import { CreateResearchWagmi } from "../../components/SendTransaction/sendTransactionWagmi";
 import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import React, {useState} from "react";
+import { TextField, Box} from "@mui/material";
+import { Link } from "react-router-dom"
+import SendIcon from '@mui/icons-material/Send';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 // const INFURA_ID = "e18cea1fcdc44e6a84e5ab03efd311af";
 // const provider = new ethers.providers.JsonRpcProvider(
@@ -14,12 +16,7 @@ import { useAccount, useConnect, useDisconnect } from 'wagmi'
 
 // const publicKey = "0x30D38078D6117285d6730F971d3F50A9004a575B";
 
-// const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
-// const wallet = new ethers.Wallet(privateKey, provider);
-
-// const contractABI = [
-//   "function createResearch(string,string,string,uint8,uint256,uint256,address[],uint256,uint256,string) view returns ()",
-// ];
+// const contractABI = ["function createResearch(string,string,string,uint8,uint256,uint256,address[],uint256,uint256,string) view returns ()"];
 // const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
 const styles = {
@@ -224,7 +221,7 @@ const ResearchForm = () => {
           image={"url"}
         /> : <Box>Connect your wallet</Box>}
       </form>
-    </div>
+        </div>
   );
 };
 

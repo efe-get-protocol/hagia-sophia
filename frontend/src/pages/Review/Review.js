@@ -3,6 +3,9 @@ import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 const styles = {
     form: {
       display: 'flex',
@@ -30,6 +33,8 @@ const Review = () => {
         documentUrl: '',
         rating: ''
       });
+
+    const [alertSuccess, setAlertSuccess] = useState(false);
     
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -40,6 +45,7 @@ const Review = () => {
         e.preventDefault();
         // Handle form submission here This is where etherjs
         console.log(formData);
+        setAlertSuccess(true);
       };
     
       return (
@@ -118,6 +124,11 @@ const Review = () => {
             Submit
           </Button>
         </form>
+        <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
+          Successfully Requested Peer Review
+        </MuiAlert>
+      </Snackbar>
     </div>
     );
       

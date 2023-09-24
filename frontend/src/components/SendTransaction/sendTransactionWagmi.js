@@ -4,6 +4,8 @@ import {
   useContractWrite,
   useWaitForTransaction,
 } from "wagmi";
+import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+
 import SendIcon from "@mui/icons-material/Send";
 import { TextField, Button } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";

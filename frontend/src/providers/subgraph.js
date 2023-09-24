@@ -13,6 +13,8 @@ const stateValues = {
   previousResearch: [],
   userNfts: [],
   isResearcher: false,
+  researcherData:{}
+  
 };
 
 const contextValues = {
@@ -63,9 +65,9 @@ export const ResearchProvider = ({ children }) => {
           "https://skilled-warmhearted-diamond.matic.discover.quiknode.pro/bdd60ff4553d1623a24612e789066236ba54e938/",
           requestOptions
         );
-
+        console.log("userNfts", response)
         const json = await response.json();
-        const result = json.result.totalItems;
+        const result = json.result.assets;
         console.log(result);
         return result;
       }
@@ -180,27 +182,46 @@ export const ResearchProvider = ({ children }) => {
         const result = await polygonApolloClient.query({
           query: gql`
         query{
-                researcher(id: "${address.toLowerCase()}") {
-                  previousPeerReviews(first: 10) {
-                        feedback
-                  researchId
-                  documentUrl
-                    rating
-                  }
-                }
-              }
+          researcher(id: "${address.toLowerCase()}") {
+            id
+            affiliation
+            name
+          }
+        }
             `,
         });
 
-        const previousPeerReviews = result.data.researcher.previousPeerReviews;
+        const researcher = result.data.researcher;
 
-        return previousPeerReviews;
+        return researcher;
       }
     } catch (error) {
       console.error(error);
     }
   }, []);
+  const fetchResearcherData = useCallback(async (walletAddress) => {
+    try {
+      if(walletAddress){
+      const result = await polygonApolloClient.query({
+        query: gql`
+          query {
+            researcher(id: "${walletAddress.toLowerCase()}") {
+              id
+              affiliation
+              name
+            }
+          }
+        `,
+      });
 
+      const researches = result.data.researches;
+
+      return researches;
+    }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
   const verifyResearcher = useCallback(async (walletAddress) => {
     if (address != undefined) {
       var myHeaders = new Headers();
@@ -251,6 +272,7 @@ export const ResearchProvider = ({ children }) => {
       previousResearch,
       userNfts,
       isResearcher,
+      researcherData
     ] = await Promise.all([
       fetchBounties(),
       fetchPeerReviews(),
@@ -259,6 +281,7 @@ export const ResearchProvider = ({ children }) => {
       fetchPreviousResearch(address),
       fetchNFTs(address),
       verifyResearcher(address),
+      fetchResearcherData(address)
     ]);
 
     setState((prevState) => {
@@ -271,7 +294,8 @@ export const ResearchProvider = ({ children }) => {
         previousPeerReviews: previousPeerReviews,
         previousResearch: previousResearch,
         userNfts: userNfts,
-        isResearcher: isResearcher
+        isResearcher: isResearcher,
+        researcherData: researcherData
       };
     });
   }, []);

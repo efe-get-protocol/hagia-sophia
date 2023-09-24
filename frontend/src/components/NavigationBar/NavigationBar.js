@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import './NavigationBar.css'
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -16,6 +16,7 @@ import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom'
 import { Web3Button } from '@web3modal/react'
+import { ResearchContext } from '../../providers/subgraph';
 
 const pages = ['Crowdfunding', 'Bounties', 'Review', 'Collections'];
 const settings = ['Profile', 'Logout'];
@@ -38,6 +39,8 @@ const NavigationBar = () => {
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
+
+  const {isResearcher} = useContext(ResearchContext)
 
   return (
     <AppBar position="static" sx={{ backgroundColor: '#0D47A1' }}>
@@ -135,7 +138,7 @@ const NavigationBar = () => {
             ))}
           </Box>
           <Web3Button />
-          <Box sx={{ paddingLeft: '30px', flexGrow: 0 }}>
+          {isResearcher ? (<Box sx={{ paddingLeft: '30px', flexGrow: 0 }}>
             <Tooltip title="Open Profile">
               <IconButton component={Link} to='/Profile' sx={{ p: 0 }}>
                 <Avatar alt="Remy Sharp" src="person.png" />
@@ -163,7 +166,8 @@ const NavigationBar = () => {
                 </MenuItem>
               ))}
             </Menu>
-          </Box>
+          </Box>)
+          : <Box/>}
         </Toolbar>
       </Container>
     </AppBar>

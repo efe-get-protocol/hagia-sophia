@@ -10,14 +10,14 @@ import Item from '@mui/material/Stack'
 import { ResearchContext,  } from "../../providers/subgraph";
 
 const Collections = () => {
-  const {  researches } = useContext(ResearchContext);
+  const {  userNfts } = useContext(ResearchContext);
 
-  if(researches) return (
+  if(userNfts) return (
     <div>
       <br/>
       <h1>My NFT Collection</h1>
       <div className="info-container">
-        {researches.map(item => <CollectionCard image={item.image} organization={item.title} description={item.description} />
+        {userNfts.map(item => <CollectionCard image={item.image} organization={item.title} description={item.description} />
           )} 
        </div>
     </div>

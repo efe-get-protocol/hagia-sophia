@@ -60,6 +60,7 @@ export const ResearchProvider = ({ children }) => {
         query: gql`
           query {
             bounties(first: 10) {
+              id
               bountyAmount
               description
               documentUrl

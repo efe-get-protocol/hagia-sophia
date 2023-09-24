@@ -9,8 +9,9 @@ import {useState} from 'react'
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { Apply } from '../SendTransaction/sendTransactionWagmi';
 
-const BountyAction = ({image, organization, description}) => {
+const BountyAction = ({image, organization, description, id}) => {
 
     const [alertSuccess, setAlertSuccess] = useState(false);
 
@@ -37,7 +38,7 @@ const BountyAction = ({image, organization, description}) => {
         </Typography>
       </CardContent>
         <CardActions>
-        <Button onClick={handleApply} style={{color: 'white', margin: 'auto', backgroundColor: 'blue'}} size="small">Apply</Button>
+        <Apply id={id}/>
         </CardActions>
     </Card>
 

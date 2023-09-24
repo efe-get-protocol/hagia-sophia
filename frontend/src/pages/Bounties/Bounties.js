@@ -10,9 +10,6 @@ const Bounties = () => {
 
   const { bounties, previousPeerReviews, previousResearch } = useContext(ResearchContext);
 
-  if(previousPeerReviews)   console.log("peer", previousPeerReviews)
-
-
   if(bounties) return (
     <div> 
       <br/>
@@ -20,7 +17,7 @@ const Bounties = () => {
       <br/>
       <br/>
       <div className="info-container">
-      {bounties.map(item => <BountyAction image={"science_background_image.jpeg"} organization={item.title} description={item.description} />
+      {bounties.map(item => <BountyAction image={"science_background_image.jpeg"} id={item.id} organization={item.title} description={item.description} />
           )}
       </div>
     </div>

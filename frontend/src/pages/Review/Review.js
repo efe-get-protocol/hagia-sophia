@@ -5,6 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { CreatePeerReview } from "../../components/SendTransaction/sendTransactionWagmi";
 
 const styles = {
     form: {
@@ -28,7 +29,6 @@ const Review = () => {
 
     const [formData, setFormData] = useState({
         researchId: '',
-        researcherId: '',
         feedback: '',
         documentUrl: '',
         rating: ''
@@ -70,21 +70,6 @@ const Review = () => {
                 }}
             />
             <TextField
-                label="Researcher ID"
-                name="researcherId"
-                fullWidth
-                required
-                onChange={handleChange}
-                value={formData.researcherId}
-                style={styles.textField}
-                InputLabelProps={{
-                style: { color: 'white' },
-                }}
-                InputProps={{
-                style: { color: 'white', backgroundColor: '#6A0DAD' },
-                }}
-            />
-            <TextField
                 label="Peer Review Document URL"
                 name="documentUrl"
                 fullWidth
@@ -114,15 +99,22 @@ const Review = () => {
                 style: { color: 'white', backgroundColor: '#6A0DAD' },
                 }}
             />
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            style={styles.submitButton}
-            endIcon={<SendIcon />}
-          >
-            Submit
-          </Button>
+            <TextField
+                label="Feedback"
+                name="feedback"
+                fullWidth
+                required
+                onChange={handleChange}
+                value={formData.feedback}
+                style={styles.textField}
+                InputLabelProps={{
+                style: { color: 'white' },
+                }}
+                InputProps={{
+                style: { color: 'white', backgroundColor: '#6A0DAD' },
+                }}
+            />
+          <CreatePeerReview feedback={formData.feedback} documentUrl={formData.documentUrl} rating={formData.rating} researchId={formData.researchId}/>
         </form>
         <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
         <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">

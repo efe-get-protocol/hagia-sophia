@@ -5,6 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { CreateBounty } from "../../components/SendTransaction/sendTransactionWagmi";
 
 const styles = {
     form: {
@@ -113,7 +114,7 @@ const BountyForm = () => {
                 style: { color: 'white', backgroundColor: '#6A0DAD' },
                 }}
             />
-          <Button
+          {/* <Button
             type="submit"
             variant="contained"
             color="primary"
@@ -121,7 +122,8 @@ const BountyForm = () => {
             endIcon={<SendIcon />}
           >
             Submit
-          </Button>
+          </Button> */}
+          <CreateBounty title={formData.title} description={formData.description} documentUrl={formData.documentUrl} bountyAmount={formData.bountyAmount}/>
         </form>
         <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
         <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">

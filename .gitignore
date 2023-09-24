@@ -12,4 +12,7 @@ docs/
 
 # Dotenv file
 .env
-frontend/env.js
+thegraph/node_modules
+node_modules
+thegraph/generated
+thegraph/build

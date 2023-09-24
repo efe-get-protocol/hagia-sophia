@@ -1,0 +1,57 @@
+type Researcher @entity {
+  id: ID!
+  name: String! # string
+  affiliation: String! # string
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  previousPeerReviews: [PeerReview!]!
+  previousResearch: [Research!]!
+  previousBounties: [Bounty!]!
+}
+
+type Research @entity {
+  id: ID!
+  title: String! # string
+  description: String! # string
+  documentUrl: String! # string
+  fundingType: Int! # uint8
+  contributingResearchers: [Bytes!]! # address[]
+  fundingLimit: BigInt! # uint256
+  reviewerLimit: BigInt! # uint256
+  reviewDeadline: BigInt! # uint256
+  reviewFundingPercentage: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  peerReviews: [PeerReview!]!
+  fundingReceived: BigInt!
+  image: String!
+}
+
+type Bounty @entity {
+  id: ID!
+  title: String! # string
+  description: String! # string
+  documentUrl: String! # string
+  bountyAmount: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+  applications: [Bytes!]!
+  pickedResearchers: [Bytes!]!
+}
+
+type PeerReview @entity {
+  id: ID!
+  researcherId: Bytes! # address
+  researchId: BigInt!
+  peerReviewId: BigInt! # uint256
+  feedback: String! # string
+  documentUrl: String! # string
+  rating: Int! # uint8
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+

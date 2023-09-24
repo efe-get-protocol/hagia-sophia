@@ -209,7 +209,7 @@ export const ResearchProvider = ({ children }) => {
       var raw = JSON.stringify([
         {
           id: 67,
-          method: "qn_verifyNFTsOwner",
+          method: "qn_fetchNFTs",
           params: [
             {
               wallet: walletAddress,
@@ -231,11 +231,10 @@ export const ResearchProvider = ({ children }) => {
         requestOptions
       );
       const result = await response.json();
+      console.log("res", result)
+      console.log(result[0].result)
       return result[0].result.assets.length > 0;
-    }
-
-    return false;
-  }, []);
+    }  }, []);
 
   const fetchSubgraphData = useCallback(async (address) => {
     setState(() => {
@@ -272,6 +271,7 @@ export const ResearchProvider = ({ children }) => {
         previousPeerReviews: previousPeerReviews,
         previousResearch: previousResearch,
         userNfts: userNfts,
+        isResearcher: isResearcher
       };
     });
   }, []);

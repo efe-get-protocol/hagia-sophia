@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import { ResearchContext } from '../../providers/subgraph';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
@@ -20,7 +21,8 @@ const Item = styled(Paper)(({ theme }) => ({
 
 const Profile = () => {
   // Define user data (you can fetch this from an API or other source)
-
+  const {userNFTs} = useContext(ResearchContext)
+  
   const userData = {
     name: 'John Doe',
     affiliation: 'University XYZ',

@@ -57,6 +57,7 @@ const Profile = () => {
 
   const handleClaimPrize = () => {
     //add logic
+    console.log(researcherId)
 
     setIsClaimPrizeDialogOpen(false);
     setAlertSuccess(true);
@@ -64,6 +65,8 @@ const Profile = () => {
   const handlePeerReviewPrize = () => {
     //add logic
 
+    console.log(peerRevId)
+    
     setIsClaimFundDialogOpen(false);
     setAlertSuccess(true);
   }

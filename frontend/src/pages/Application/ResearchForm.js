@@ -1,14 +1,17 @@
+
+
 import React, {useState} from "react";
 import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
 import {ethers, BigNumber} from 'ethers';
+import { privateKey } from "../../env";
 
 const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
 const provider = new ethers.providers.JsonRpcProvider(`https://polygon-mainnet.g.alchemy.com/v2/Qni5uO72dYJS_s5J74W5ptgQmOVISuUS`)
 
 const publicKey = "0x30D38078D6117285d6730F971d3F50A9004a575B"
-const privateKey = '' // Private key of account 1
+ 
 const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
 const wallet = new ethers.Wallet(privateKey, provider);
 

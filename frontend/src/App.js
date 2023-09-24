@@ -1,4 +1,9 @@
+
 import './App.css';
+import { EthereumClient, w3mConnectors, w3mProvider } from '@web3modal/ethereum'
+import { Web3Modal } from '@web3modal/react'
+import { configureChains, createConfig, WagmiConfig } from 'wagmi'
+import { arbitrum, mainnet, polygon } from 'wagmi/chains'
 import { Route, Routes } from 'react-router-dom'
 import NavigationBar from './components/NavigationBar/NavigationBar.js'
 import Crowdfunding from './pages/Crowdfunding/Crowdfunding.js';
@@ -11,6 +16,19 @@ import { ResearchProvider } from './providers/subgraph';
 import { useMemo } from 'react';
 import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
 import BountyForm from './pages/Application/BountyForm'
+import { WALLET_CONNECT_ID } from "./env";
+
+
+const chains = [polygon]
+const projectId = WALLET_CONNECT_ID;
+
+const { publicClient } = configureChains(chains, [w3mProvider({ projectId })])
+const wagmiConfig = createConfig({
+  autoConnect: true,
+  connectors: w3mConnectors({ projectId, chains }),
+  publicClient
+})
+const ethereumClient = new EthereumClient(wagmiConfig, chains)
 
 function App() {
   const subgraphClient = useMemo(() => {

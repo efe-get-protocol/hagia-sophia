@@ -14,8 +14,7 @@ const Bounties = () => {
 
 
   if(bounties) return (
-    <div>
-      <br/>
+    <div> 
       <Button component={Link} to="/BountyForm" variant="contained" endIcon={<SendIcon />} >Create Bounty</Button>
       <br/>
       <br/>

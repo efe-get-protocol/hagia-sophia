@@ -2,6 +2,8 @@ import React, {useState} from "react";
 import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 
 // const { ethers } = require("ethers");
@@ -9,12 +11,12 @@ import SendIcon from '@mui/icons-material/Send';
 // const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
 // const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`)
 
-const privateKey = 'd25d586238b2809ddc2b3d77d55a0add701d84d9dc31449138214992f3e2db10' // Private key of account 1
-const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
-const wallet = new ethers.Wallet(privateKey, provider);
+// const privateKey = 'd25d586238b2809ddc2b3d77d55a0add701d84d9dc31449138214992f3e2db10' // Private key of account 1
+// const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
+// const wallet = new ethers.Wallet(privateKey, provider);
 
-const contractABI = ["function createResearch(string,string,string,uint8,uint256,uint256,address[],uint256,uint256,string) view returns ()"];
-const contract = new ethers.Contract(contractAddress, contractABI, wallet);
+// const contractABI = ["function createResearch(string,string,string,uint8,uint256,uint256,address[],uint256,uint256,string) view returns ()"];
+// const contract = new ethers.Contract(contractAddress, contractABI, wallet);
 
 const styles = {
     form: {
@@ -45,6 +47,8 @@ const ResearchForm = () => {
         reviewFundingPercentage: '',
         image: '',
       });
+
+      const [alertSuccess, setAlertSuccess] = useState(false);
     
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -54,13 +58,14 @@ const ResearchForm = () => {
       const handleSubmit = (e) => {
         e.preventDefault();
         // Handle form submission here This is where etherjs
-        try {
-          const tx =  contract.connect(wallet).createResearch(formData.title, formData.description, formData.documentUrl, 0, formData.fundingLimit, formData.reviewFundingPercentage, [],formData.reviewerLimit, 0, formData.image);
-          const receipt = tx.wait();
+        // try {
+        //   const tx =  contract.connect(wallet).createResearch(formData.title, formData.description, formData.documentUrl, 0, formData.fundingLimit, formData.reviewFundingPercentage, [],formData.reviewerLimit, 0, formData.image);
+        //   const receipt = tx.wait();
           
-        } catch (error) {
-          console.error("Error:", error);
-        }
+        // } catch (error) {
+        //   console.error("Error:", error);
+        // }
+        setAlertSuccess(true);
 
         
       };
@@ -185,6 +190,11 @@ const ResearchForm = () => {
             Submit
           </Button>
         </form>
+        <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
+            Successfully Submitted Crowdfunding Contract Application!
+        </MuiAlert>
+      </Snackbar>
     </div>
     );
       

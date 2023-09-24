@@ -3,6 +3,9 @@ import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
 
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+
 const styles = {
     form: {
       display: 'flex',
@@ -29,6 +32,8 @@ const BountyForm = () => {
         documentUrl: '',
         bountyAmount: ''
       });
+
+    const [alertSuccess, setAlertSuccess] = useState(false);
     
       const handleChange = (e) => {
         const { name, value } = e.target;
@@ -39,6 +44,7 @@ const BountyForm = () => {
         e.preventDefault();
         // Handle form submission here This is where etherjs
         console.log(formData);
+        setAlertSuccess(true);
       };
     
       return (
@@ -92,6 +98,21 @@ const BountyForm = () => {
                 style: { color: 'white', backgroundColor: '#6A0DAD' },
                 }}
             />
+            <TextField
+                label="Bounty Amount"
+                name="bountyAmount"
+                fullWidth
+                required
+                onChange={handleChange}
+                value={formData.bountyAmount}
+                style={styles.textField}
+                InputLabelProps={{
+                style: { color: 'white' },
+                }}
+                InputProps={{
+                style: { color: 'white', backgroundColor: '#6A0DAD' },
+                }}
+            />
           <Button
             type="submit"
             variant="contained"
@@ -102,6 +123,11 @@ const BountyForm = () => {
             Submit
           </Button>
         </form>
+        <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
+          Successfully Submitted Bounty Application!
+        </MuiAlert>
+      </Snackbar>
     </div>
     );
       

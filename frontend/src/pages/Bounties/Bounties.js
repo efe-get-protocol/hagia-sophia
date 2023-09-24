@@ -8,9 +8,9 @@ import { ResearchContext, ResearchProvider } from "../../providers/subgraph";
 
 const Bounties = () => {
 
-  const { bounties } = useContext(ResearchContext);
+  const { bounties, previousPeerReviews, previousResearch } = useContext(ResearchContext);
 
-  
+  if(previousPeerReviews)   console.log("peer", previousPeerReviews)
 
 
   if(bounties) return (

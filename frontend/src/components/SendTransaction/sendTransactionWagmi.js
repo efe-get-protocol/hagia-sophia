@@ -11,7 +11,7 @@ import MuiAlert from "@mui/material/Alert";
 import { parseEther } from "viem";
 import { useState, useContext } from "react";
 import { ResearchContext, ResearchProvider } from "../../providers/subgraph";
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 
 const styles = {
   form: {
@@ -200,6 +200,7 @@ export function Apply(props) {
   }
 }
 export function ClaimFunds(props) {
+  console.log("claim funds", props.researchId);
   const {
     config,
     error: prepareError,
@@ -227,17 +228,66 @@ export function ClaimFunds(props) {
   });
 
   return (
-      <div >
-        <Button
-          variant="contained"
-          style={styles.submitButton}
-          endIcon={<MonetizationOnIcon />}
-          disabled={!write || isLoading}
-          onClick={() => write()}
-        >
-          {isLoading ? "Cashing in" : "Cash in Funds"}
-        </Button>
-        {/* <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+    <div>
+      <Button
+        variant="contained"
+        style={styles.submitButton}
+        endIcon={<MonetizationOnIcon />}
+        disabled={!write || isLoading}
+        onClick={() => write()}
+      >
+        {isLoading ? "Cashing in" : "Cash in Funds"}
+      </Button>
+      {/* <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+        <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
+            Successfully Submitted Crowdfunding Contract Application!
+        </MuiAlert>
+      </Snackbar> */}
+    </div>
+  );
+}
+
+export function SendFunds(props) {
+  console.log(props.donation)
+  const {
+    config,
+    error: prepareError,
+    isError: isPrepareError,
+  } = usePrepareContractWrite({
+    address: "0x942380a100C0f489A163060f3a42359347FB4a2D",
+    abi: [
+      {
+        inputs: [
+          { internalType: "uint256", name: "researchId", type: "uint256" },
+        ],
+        name: "fund",
+        outputs: [],
+        stateMutability: "payable",
+        type: "function",
+      },
+    ],
+    functionName: "fund",
+    args: [props.researchId],
+    value: parseEther(props.donation),
+
+  });
+  const { data, error, isError, write } = useContractWrite(config);
+
+  const { isLoading, isSuccess } = useWaitForTransaction({
+    hash: data?.hash,
+  });
+
+  return (
+    <div>
+      <Button
+        variant="contained"
+        endIcon={<MonetizationOnIcon />}
+        disabled={!write || isLoading}
+        onClick={() => write()}
+      >
+        {isLoading ? "Donating" : "Donate"}
+      </Button>
+      {/* <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
         <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
             Successfully Submitted Crowdfunding Contract Application!
         </MuiAlert>
@@ -274,21 +324,21 @@ export function ClaimPeerReviewPrize(props) {
   });
 
   return (
-      <div>
-        <Button
-          variant="contained"
-          endIcon={<MonetizationOnIcon />}
-          disabled={!write || isLoading}
-          onClick={() => write()}
-        >
-          {isLoading ? "Collecting" : "Collect Peer Review Funds"}
-        </Button>
-        {/* <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
+    <div>
+      <Button
+        variant="contained"
+        endIcon={<MonetizationOnIcon />}
+        disabled={!write || isLoading}
+        onClick={() => write()}
+      >
+        {isLoading ? "Collecting" : "Collect Peer Review Funds"}
+      </Button>
+      {/* <Snackbar open={alertSuccess} autoHideDuration={3000} onClose={() => setAlertSuccess(false)}>
         <MuiAlert elevation={6} variant="filled" onClose={() => setAlertSuccess(false)} severity="success">
             Successfully Submitted Crowdfunding Contract Application!
         </MuiAlert>
       </Snackbar> */}
-      </div>
+    </div>
   );
 }
 

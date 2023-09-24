@@ -18,7 +18,7 @@ const Crowdfunding = () => {
       <br/>
       <br/>
       <div className="info-container">
-        {researches.map(item => <Infographic key={item.title+item.description}image={item.image} organization={item.title} description={item.description} amount_raised={item.fundingReceived} target_amount={item.fundingLimit} />
+        {researches.map(item => <Infographic key={item.title+item.description}image={item.image} organization={item.title} description={item.description} amount_raised={item.fundingReceived} target_amount={item.fundingLimit} id={item.id}/>
           )}
       </div>
     </div>

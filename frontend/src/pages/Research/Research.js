@@ -19,6 +19,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { SendFunds } from '../../components/SendTransaction/sendTransactionWagmi';
 
 const useStyles = makeStyles({
   card: {
@@ -42,7 +43,8 @@ const Research = () => {
   const description = queryParams.get('description');
   const amount_raised = queryParams.get('amount_raised');
   const target_amount = queryParams.get('target_amount');
-
+  const id = queryParams.get('id');
+console.log("asd", id)
   const handleDonateClick = () => {
     setIsDialogOpen(true);
   };
@@ -105,9 +107,7 @@ const Research = () => {
         <Button onClick={() => setIsDialogOpen(false)} color="primary">
           Cancel
         </Button>
-        <Button onClick={handleDonateSubmit} color="primary">
-          Donate
-        </Button>
+        <SendFunds researchId={id} donation={donationAmount}/>
       </DialogActions>
       </Dialog>
 

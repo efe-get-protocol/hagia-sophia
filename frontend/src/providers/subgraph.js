@@ -80,6 +80,7 @@ export const ResearchProvider = ({ children }) => {
         query: gql`
           query {
             researches(first: 10) {
+              id
               description
               documentUrl
               fundingLimit
@@ -202,8 +203,10 @@ export const ResearchProvider = ({ children }) => {
     }
   }, []);
   const fetchResearcherData = useCallback(async (walletAddress) => {
+    console.log("12312312321")
     try {
       if(walletAddress){
+        console.log("wallet address", walletAddress)
       const result = await polygonApolloClient.query({
         query: gql`
           query {
@@ -217,11 +220,11 @@ export const ResearchProvider = ({ children }) => {
       });
 
       const researcher = result.data.researcher;
-      console.log("reseras", researcher)
       return researcher;
     }
     } catch (error) {
-      console.error(error);
+      
+      console.error("anni skm");
     }
   }, []);
   const verifyResearcher = useCallback(async (walletAddress) => {

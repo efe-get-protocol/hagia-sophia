@@ -34,6 +34,7 @@ const Item = styled(Paper)(({ theme }) => ({
 const Profile = () => {
   // Define user data (you can fetch this from an API or other source)
   const {researcherData} = useContext(ResearchContext)
+  console.log("researcherData", researcherData)
   const {address} = useAccount()
   const [isClaimPrizeDialogOpen, setIsClaimPrizeDialogOpen] = useState(false);
   const [isClaimFundDialogOpen, setIsClaimFundDialogOpen] = useState(false);
@@ -120,7 +121,7 @@ else {
         <Button onClick={() => setIsClaimPrizeDialogOpen(false)} color="primary">
           Cancel
         </Button>
-        <ClaimFunds researcherId={researcherId}/>
+        <ClaimFunds researchId={researcherId}/>
       </DialogActions>
       </Dialog>
 

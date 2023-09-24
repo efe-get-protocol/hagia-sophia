@@ -8,10 +8,10 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box'
 import {Link} from 'react-router-dom'
 
-const Infographic = ({image, organization, description, amount_raised, target_amount}) => {
+const Infographic = ({image, organization, description, amount_raised, target_amount, id}) => {
   return (
     <Card sx={{ maxWidth: 475 }}>
-      <CardActionArea component={Link} to={`/Research?image=${image}&organization=${organization}&description=${description}&amount_raised=${amount_raised}&target_amount=${target_amount}`}>
+      <CardActionArea component={Link} to={`/Research?image=${image}&organization=${organization}&description=${description}&amount_raised=${amount_raised}&target_amount=${target_amount}&id=${id}`}>
       <CardMedia
         sx={{ height: 440 }}
         image={image}

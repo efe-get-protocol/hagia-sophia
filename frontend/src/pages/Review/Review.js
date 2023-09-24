@@ -24,10 +24,11 @@ const styles = {
 const Review = () => {
 
     const [formData, setFormData] = useState({
-        title: '',
-        description: '',
+        researchId: '',
+        researcherId: '',
+        feedback: '',
         documentUrl: '',
-        bountyAmount: ''
+        rating: ''
       });
     
       const handleChange = (e) => {
@@ -43,17 +44,17 @@ const Review = () => {
     
       return (
         <div className="research-form">
-        <h1>Please fill out the information below and wait for approval.</h1>
+        <h1>Please fill out the information below for peer review and wait for approval.</h1>
           <br/>
           <br/>
         <form style={styles.form} onSubmit={handleSubmit}>
             <TextField
-                label="Title"
-                name="title"
+                label="Research ID"
+                name="researchId"
                 fullWidth
                 required
                 onChange={handleChange}
-                value={formData.title}
+                value={formData.researchId}
                 style={styles.textField}
                 InputLabelProps={{
                 style: { color: 'white' },
@@ -63,12 +64,12 @@ const Review = () => {
                 }}
             />
             <TextField
-                label="Description"
-                name="description"
+                label="Researcher ID"
+                name="researcherId"
                 fullWidth
                 required
                 onChange={handleChange}
-                value={formData.description}
+                value={formData.researcherId}
                 style={styles.textField}
                 InputLabelProps={{
                 style: { color: 'white' },
@@ -78,12 +79,27 @@ const Review = () => {
                 }}
             />
             <TextField
-                label="Bounty Document URL"
+                label="Peer Review Document URL"
                 name="documentUrl"
                 fullWidth
                 required
                 onChange={handleChange}
                 value={formData.documentUrl}
+                style={styles.textField}
+                InputLabelProps={{
+                style: { color: 'white' },
+                }}
+                InputProps={{
+                style: { color: 'white', backgroundColor: '#6A0DAD' },
+                }}
+            />
+            <TextField
+                label="Rating"
+                name="rating"
+                fullWidth
+                required
+                onChange={handleChange}
+                value={formData.rating}
                 style={styles.textField}
                 InputLabelProps={{
                 style: { color: 'white' },

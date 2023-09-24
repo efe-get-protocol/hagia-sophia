@@ -4,10 +4,10 @@ import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
 
 
-const { ethers } = require("ethers");
+// const { ethers } = require("ethers");
 
-const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
-const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`)
+// const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
+// const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`)
 
 const privateKey = 'd25d586238b2809ddc2b3d77d55a0add701d84d9dc31449138214992f3e2db10' // Private key of account 1
 const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";

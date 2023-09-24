@@ -27,7 +27,7 @@ const Infographic = ({image, organization, description, amount_raised, target_am
       </CardContent>
         <Typography>
           <Box component="span" fontWeight='bold'>
-          ${amount_raised} raised out of ${target_amount} </Box> 
+          ${parseInt(amount_raised / 10**18)} raised out of ${parseInt(target_amount/ 10**18)} </Box> 
         </Typography>
       </CardActionArea>
     </Card>

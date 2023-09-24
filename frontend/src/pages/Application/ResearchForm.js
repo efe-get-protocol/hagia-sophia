@@ -2,12 +2,10 @@ import React, {useState} from "react";
 import { TextField, Button} from "@mui/material";
 import { Link } from "react-router-dom"
 import SendIcon from '@mui/icons-material/Send';
+import {ethers} from 'ethers';
 
-
-// const { ethers } = require("ethers");
-
-// const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
-// const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/${INFURA_ID}`)
+const INFURA_ID = 'e18cea1fcdc44e6a84e5ab03efd311af'
+const provider = new ethers.providers.JsonRpcProvider(`https://mainnet.infura.io/v3/e18cea1fcdc44e6a84e5ab03efd311af`)
 
 const privateKey = 'd25d586238b2809ddc2b3d77d55a0add701d84d9dc31449138214992f3e2db10' // Private key of account 1
 const contractAddress = "0x942380a100C0f489A163060f3a42359347FB4a2D";
@@ -51,13 +49,12 @@ const ResearchForm = () => {
         setFormData({ ...formData, [name]: value });
       };
     
-      const handleSubmit = (e) => {
-        e.preventDefault();
+      const handleSubmit = async () => {
+        // e.preventDefault();
         // Handle form submission here This is where etherjs
         try {
-          const tx =  contract.connect(wallet).createResearch(formData.title, formData.description, formData.documentUrl, 0, formData.fundingLimit, formData.reviewFundingPercentage, [],formData.reviewerLimit, 0, formData.image);
-          const receipt = tx.wait();
-          
+          const tx =  await contract.connect(wallet).createResearch(formData.title, formData.description, formData.documentUrl, 0, formData.fundingLimit, formData.reviewFundingPercentage, [],formData.reviewerLimit, 0, formData.image);
+          console.log("tx", tx)
         } catch (error) {
           console.error("Error:", error);
         }

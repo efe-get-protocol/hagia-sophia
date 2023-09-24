@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom'
+import { Web3Button } from '@web3modal/react'
 
 const pages = ['Crowdfunding', 'Bounties', 'Review'];
 const settings = ['Profile', 'Logout'];
@@ -133,7 +134,7 @@ const NavigationBar = () => {
               </Button>
             ))}
           </Box>
-
+          <Web3Button />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

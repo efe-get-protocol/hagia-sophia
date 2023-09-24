@@ -49,10 +49,12 @@ function App() {
   }, ["https://api.thegraph.com/subgraphs/name/efesozen7/hagia-sophia-2"]);
   return (
     <div className="App" id="outer-container">
-      <NavigationBar/>
+      <WagmiConfig config={wagmiConfig}>      
       <ApolloProvider client={subgraphClient}>
 
       <ResearchProvider>
+      <NavigationBar/>
+
       <Routes>
         <Route path='/' element={ <Crowdfunding/> } />
         <Route path='/Crowdfunding' element={ <Crowdfunding/> } />
@@ -66,7 +68,8 @@ function App() {
       </Routes>
       </ResearchProvider>
       </ApolloProvider>
-
+      </WagmiConfig>
+      <Web3Modal projectId={projectId} ethereumClient={ethereumClient} />
     </div>
   );
 }

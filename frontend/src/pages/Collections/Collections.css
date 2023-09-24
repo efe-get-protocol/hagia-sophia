@@ -1,0 +1,15 @@
+
+.info-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(calc(16.666% - 20px), 1fr)); /* Maximum of 6 cards per row */
+    grid-gap: 40px; /* Adjust the spacing between cards */
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+.infographic-card {
+    flex: 1;
+    margin: 10px; /* Adjust the spacing between cards */
+    max-width: calc(33.33% - 20px); /* Adjust the card width and spacing */
+  }
+

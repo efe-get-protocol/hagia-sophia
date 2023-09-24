@@ -1,5 +1,5 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { useAccount, useConnect, useDisconnect } from 'wagmi'
+import { useAccount, useConnect, useDisconnect } from "wagmi";
 
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 
@@ -10,7 +10,8 @@ const stateValues = {
   bounties: [],
   peerReviews: [],
   previousPeerReviews: [],
-  previousResearch: []
+  previousResearch: [],
+  userNfts:[]
 };
 
 const contextValues = {
@@ -22,13 +23,56 @@ export const ResearchContext = createContext(contextValues);
 
 export const ResearchProvider = ({ children }) => {
   const [state, setState] = useState({});
-  const { address,isConnected } = useAccount()
-  console.log(address)
+  const { address, isConnected } = useAccount();
+  console.log(address);
   const polygonApolloClient = new ApolloClient({
     uri: "https://api.thegraph.com/subgraphs/name/efesozen7/hagia-sophia-2",
     cache: new InMemoryCache(),
   });
 
+  const fetchNFTs = useCallback(async (walletAddress) => {
+    try {
+      if (address != undefined) {
+        var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var raw = JSON.stringify({
+      id: 67,
+      jsonrpc: "2.0",
+      method: "qn_fetchNFTs",
+      params: [
+        {
+          wallet: walletAddress,
+          omitFields: ["traits"],
+          page: 1,
+          perPage: 10,
+          contracts: ["0xD9e9927098DcEA8a6D6698c77922B4588C2aA9E4"],
+        },
+      ],
+    });
+
+    var requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
+
+      const response = await fetch(
+        "https://skilled-warmhearted-diamond.matic.discover.quiknode.pro/bdd60ff4553d1623a24612e789066236ba54e938/",
+        requestOptions
+      )
+        
+      
+      const json = await response.json()
+      const result = json.result.totalItems;
+      console.log(result)
+        return result;
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }, []);
   const fetchResearches = useCallback(async () => {
     try {
       const result = await polygonApolloClient.query({
@@ -105,9 +149,9 @@ export const ResearchProvider = ({ children }) => {
 
   const fetchPreviousResearch = useCallback(async (address) => {
     try {
-      if(address != undefined) {const result = await polygonApolloClient.query({
-        query:
-          gql`
+      if (address != undefined) {
+        const result = await polygonApolloClient.query({
+          query: gql`
           query{
                 researcher(id: "${address.toLowerCase()}") {
                   previousResearch(first: 10) {
@@ -119,12 +163,12 @@ export const ResearchProvider = ({ children }) => {
                 }
               }
             `,
-      });
+        });
 
-      const previousResearch = result.data.researcher.previousResearch;
+        const previousResearch = result.data.researcher.previousResearch;
 
-      return previousResearch;}
-      
+        return previousResearch;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -132,10 +176,9 @@ export const ResearchProvider = ({ children }) => {
 
   const fetchPreviousPeerReviews = useCallback(async (address) => {
     try {
-      if(address != undefined){
+      if (address != undefined) {
         const result = await polygonApolloClient.query({
-        query:
-          gql`
+          query: gql`
         query{
                 researcher(id: "${address.toLowerCase()}") {
                   previousPeerReviews(first: 10) {
@@ -147,12 +190,12 @@ export const ResearchProvider = ({ children }) => {
                 }
               }
             `,
-      });
+        });
 
-      const previousPeerReviews = result.data.researcher.previousPeerReviews;
+        const previousPeerReviews = result.data.researcher.previousPeerReviews;
 
-      return previousPeerReviews;
-    }
+        return previousPeerReviews;
+      }
     } catch (error) {
       console.error(error);
     }
@@ -165,12 +208,20 @@ export const ResearchProvider = ({ children }) => {
       };
     });
 
-    const [bounties, peerReviews, researches, previousPeerReviews, previousResearch] = await Promise.all([
+    const [
+      bounties,
+      peerReviews,
+      researches,
+      previousPeerReviews,
+      previousResearch,
+      userNfts
+    ] = await Promise.all([
       fetchBounties(),
       fetchPeerReviews(),
       fetchResearches(),
       fetchPreviousPeerReviews(address),
-      fetchPreviousResearch(address)
+      fetchPreviousResearch(address),
+      fetchNFTs(address)
     ]);
 
     setState((prevState) => {
@@ -181,7 +232,8 @@ export const ResearchProvider = ({ children }) => {
         peerReviews: peerReviews,
         researches: researches,
         previousPeerReviews: previousPeerReviews,
-        previousResearch: previousResearch
+        previousResearch: previousResearch,
+        userNfts: userNfts
       };
     });
   }, []);

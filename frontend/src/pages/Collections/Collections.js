@@ -1,10 +1,11 @@
 import React, {useState, useContext} from "react";
 
-// import './Crowdfunding.css'
 import Infographic from '../../components/Infographic/Infographic'
+import CollectionCard from "../../components/CollectionCard/CollectionCard";
 import Button from '@mui/material/Button'
 import SendIcon from '@mui/icons-material/Send';
 import { Link } from 'react-router-dom';
+import Item from '@mui/material/Stack'
 
 import { ResearchContext,  } from "../../providers/subgraph";
 
@@ -14,11 +15,9 @@ const Collections = () => {
   if(researches) return (
     <div>
       <br/>
-      <Button component={Link} to="/ResearchForm" variant="contained" endIcon={<SendIcon />} >Create Crowdfunding Contract</Button>
-      <br/>
-      <br/>
+      <h1>My NFT Collection</h1>
       <div className="info-container">
-        {researches.map(item => <Infographic key={item.title+item.description}image={item.image} organization={item.title} description={item.description} amount_raised={item.fundingReceived} target_amount={item.fundingLimit} />
+        {researches.map(item => <CollectionCard image={item.image} organization={item.title} description={item.description} />
           )} 
        </div>
     </div>

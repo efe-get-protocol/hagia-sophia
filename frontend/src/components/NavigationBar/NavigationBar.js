@@ -17,7 +17,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import {Link} from 'react-router-dom'
 import { Web3Button } from '@web3modal/react'
 
-const pages = ['Crowdfunding', 'Bounties', 'Review'];
+const pages = ['Crowdfunding', 'Bounties', 'Review', 'Collections'];
 const settings = ['Profile', 'Logout'];
 
 const NavigationBar = () => {

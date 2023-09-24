@@ -75,9 +75,9 @@ console.log("asd", id)
           </Typography>
           <br/>
           <Typography>
-            {amount_raised} Raised Out of {target_amount} MATIC
+            {amount_raised/10**18} Raised Out of {target_amount/10**18} MATIC
           </Typography>
-          <progress value={amount_raised} max={target_amount} />
+          <progress value={amount_raised/10**18} max={target_amount/10**18} />
         </CardContent>
         <CardActions disableSpacing>
           <Button onClick={handleDonateClick} style={{color: 'white', margin: 'auto', backgroundColor: 'blue'}} size="small">Donate Now</Button>

@@ -17,7 +17,7 @@ const Collections = () => {
       <br/>
       <h1>My NFT Collection</h1>
       <div className="info-container">
-        {userNfts.map(item => <CollectionCard image={item.image} organization={item.title} description={item.description} />
+        {userNfts.map(item => <CollectionCard image={item.imageUrl} organization={item.title} description={item.description} />
           )} 
        </div>
     </div>
